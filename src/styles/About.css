@@ -1,0 +1,200 @@
+.about-page {
+  width: 100%;
+}
+
+.about-hero {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--bg-dark) 100%);
+  color: var(--text-light);
+  padding: 6rem 0 4rem;
+  text-align: center;
+}
+
+.about-hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.about-tagline {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  font-weight: 600;
+  animation: fadeInUp 0.8s ease-out 0.2s backwards;
+}
+
+.about-content {
+  background-color: white;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.about-text h2 {
+  color: var(--primary-color);
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.about-text p {
+  color: var(--text-dark);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.about-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: float 3s ease-in-out infinite;
+}
+
+.mission-section {
+  background-color: var(--bg-light);
+}
+
+.mission-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.mission-card {
+  background: white;
+  padding: 2.5rem 2rem;
+  border-radius: 15px;
+  text-align: center;
+  transition: var(--transition);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+}
+
+.mission-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(255, 107, 53, 0.2);
+  border-color: var(--secondary-color);
+}
+
+.mission-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.mission-card h3 {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.mission-card p {
+  color: var(--text-dark);
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+.values-section {
+  background-color: white;
+}
+
+.values-list {
+  display: grid;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.value-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 2rem;
+  align-items: start;
+  padding: 2rem;
+  background-color: var(--bg-light);
+  border-radius: 15px;
+  transition: var(--transition);
+  border-left: 4px solid transparent;
+}
+
+.value-item:hover {
+  border-left-color: var(--secondary-color);
+  transform: translateX(10px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.value-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  opacity: 0.3;
+}
+
+.value-content h3 {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.value-content p {
+  color: var(--text-dark);
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+@media (max-width: 968px) {
+  .about-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .about-tagline {
+    font-size: 1.2rem;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about-image {
+    order: -1;
+  }
+
+  .mission-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .value-item {
+    grid-template-columns: 60px 1fr;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .value-number {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-hero h1 {
+    font-size: 2rem;
+  }
+
+  .value-item {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .value-number {
+    margin-bottom: 1rem;
+  }
+}
