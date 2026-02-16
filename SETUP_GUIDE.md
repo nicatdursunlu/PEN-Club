@@ -17,11 +17,11 @@ Simply open your web browser and navigate to this URL to see your website.
 
 **IMPORTANT**: To display your logo throughout the website:
 
-1. Save your PEN Club logo image as `logo.png`
+1. Save your PEN Club logo image as `logo.jpeg`
 2. Place it in the `public` folder (same directory as LOGO_INSTRUCTIONS.txt)
 3. The logo will automatically appear on all pages
 
-The website is currently looking for: `public/logo.png`
+The website is currently looking for: `public/logo.jpeg`
 
 ### 3. Navigate the Website
 
@@ -37,7 +37,7 @@ Your website includes these pages:
 ```
 PEN-Club/
 ├── public/
-│   └── logo.png (← ADD YOUR LOGO HERE)
+│   └── logo.jpeg (← ADD YOUR LOGO HERE)
 ├── src/
 │   ├── components/
 │   │   ├── Navbar.jsx (Navigation bar)
@@ -92,7 +92,7 @@ Edit `src/styles/global.css` to change the color scheme:
 ## 📝 Next Steps
 
 1. ✅ Open http://localhost:3000 in your browser
-2. ⏳ Add your logo to the `public` folder as `logo.png`
+2. ⏳ Add your logo to the `public` folder as `logo.jpeg`
 3. ⏳ Review the content and make any desired changes
 4. ⏳ Test on mobile devices (responsive design)
 5. ⏳ When ready, build for production with `npm run build`
@@ -100,7 +100,7 @@ Edit `src/styles/global.css` to change the color scheme:
 ## 🐛 Troubleshooting
 
 **Logo not showing?**
-- Make sure the file is named exactly `logo.png`
+- Make sure the file is named exactly `logo.jpeg`
 - Place it in the `public` folder
 - Refresh your browser (Ctrl+F5 or Cmd+Shift+R)
 

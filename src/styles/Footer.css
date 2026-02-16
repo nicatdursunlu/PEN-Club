@@ -75,7 +75,13 @@
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   transition: var(--transition);
-  font-size: 1.2rem;
+  color: white;
+}
+
+.social-link svg {
+  width: 20px;
+  height: 20px;
+  transition: var(--transition);
 }
 
 .social-link:hover {
@@ -88,6 +94,28 @@
   padding-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-bottom p {
+  margin-bottom: 0.5rem;
+}
+
+.developer-credit {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.developer-link {
+  color: var(--secondary-color);
+  font-weight: 600;
+  transition: var(--transition);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.developer-link:hover {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
 }
 
 @media (max-width: 768px) {

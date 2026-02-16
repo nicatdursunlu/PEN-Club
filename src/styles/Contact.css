@@ -117,13 +117,20 @@
   justify-content: center;
   background-color: var(--bg-light);
   border-radius: 10px;
-  font-size: 1.5rem;
+  transition: var(--transition);
+  color: var(--primary-color);
+}
+
+.social-section .social-link svg {
+  width: 24px;
+  height: 24px;
   transition: var(--transition);
 }
 
 .social-section .social-link:hover {
   background-color: var(--secondary-color);
   transform: translateY(-5px);
+  color: white;
 }
 
 .contact-form-wrapper {

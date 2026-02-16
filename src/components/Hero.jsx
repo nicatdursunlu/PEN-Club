@@ -13,9 +13,9 @@ const Hero = () => {
           </h1>
           <p className="hero-subtitle">Play • Enjoy • Network</p>
           <p className="hero-description">
-            Join our vibrant community where creativity meets connection. 
-            Experience unforgettable events, build lasting friendships, and 
-            expand your network in a fun and engaging environment.
+            A dynamic platform for Azerbaijani youth in Poland, making leisure time 
+            productive and enjoyable through games, social connections, and building 
+            a strong community. Join us for 50+ amazing events and counting!
           </p>
           <div className="hero-buttons">
             <Link to="/events" className="btn">
@@ -27,7 +27,7 @@ const Hero = () => {
           </div>
         </div>
         <div className="hero-image">
-          <img src="/logo.png" alt="PEN Club" className="hero-logo" />
+          <img src="/logo.jpeg" alt="PEN Club" className="hero-logo" />
         </div>
       </div>
       <div className="hero-scroll">

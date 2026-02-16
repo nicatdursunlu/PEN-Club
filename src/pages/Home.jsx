@@ -15,8 +15,8 @@ const Home = () => {
               <div className="feature-icon">🎮</div>
               <h3>Play</h3>
               <p>
-                Engage in exciting activities, games, and recreational events 
-                designed to bring out your playful side and create memorable experiences.
+                Sports games, board games, Mafia nights, and recreational activities 
+                that bring Azerbaijani youth together for fun and memorable experiences.
               </p>
             </div>
             
@@ -24,8 +24,8 @@ const Home = () => {
               <div className="feature-icon">🎉</div>
               <h3>Enjoy</h3>
               <p>
-                Immerse yourself in a vibrant atmosphere filled with entertainment, 
-                laughter, and joy. Every event is crafted for maximum enjoyment.
+                Picnics, social meetups, and intellectual competitions designed to 
+                make your leisure time productive while having maximum fun.
               </p>
             </div>
             
@@ -33,9 +33,29 @@ const Home = () => {
               <div className="feature-icon">🤝</div>
               <h3>Network</h3>
               <p>
-                Connect with like-minded individuals, build meaningful relationships, 
-                and expand your professional and social network.
+                Professional development events and networking opportunities to build 
+                lasting connections within the Azerbaijani community in Poland.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section stats-section">
+        <div className="container">
+          <h2 className="section-title">Our Impact</h2>
+          <div className="stats-grid">
+            <div className="stat-card">
+              <div className="stat-number">50+</div>
+              <div className="stat-label">Events Organized</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-number">5+</div>
+              <div className="stat-label">Event Categories</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-number">100%</div>
+              <div className="stat-label">Community Focused</div>
             </div>
           </div>
         </div>
@@ -44,10 +64,10 @@ const Home = () => {
       <section className="section cta-section">
         <div className="container">
           <div className="cta-content">
-            <h2>Ready to Join the Fun?</h2>
+            <h2>Ready to Join the Community?</h2>
             <p>
-              Become part of our growing community and experience the perfect 
-              blend of entertainment and networking.
+              Become part of the Azerbaijani youth community in Poland. Experience 
+              sports, games, networking, and make your leisure time truly productive!
             </p>
             <a href="/contact" className="btn">Get Started</a>
           </div>

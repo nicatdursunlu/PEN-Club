@@ -17,21 +17,20 @@ const About = () => {
             <div className="about-text">
               <h2>Our Story</h2>
               <p>
-                PEN Club was founded with a simple yet powerful vision: to create a space 
-                where people can come together to play, enjoy life, and build meaningful 
-                connections. We believe that the best networking happens when people are 
-                relaxed, having fun, and being themselves.
+                PEN Club is a dynamic platform aimed at making leisure time productive 
+                and enjoyable for Azerbaijani youth living in Poland. We believe in 
+                building social connections through games and forming a strong, supportive 
+                community where everyone feels at home.
               </p>
               <p>
-                What started as a small gathering of friends has grown into a vibrant 
-                community of diverse individuals who share a passion for life, creativity, 
-                and connection. Our events range from casual game nights to professional 
-                networking sessions, always maintaining the perfect balance between fun 
-                and purpose.
+                With over 50+ events organized, we've created countless opportunities 
+                for our community to play, enjoy, and network. From sports games to 
+                intellectual competitions, from Mafia nights to professional networking 
+                events, we bring people together in meaningful and fun ways.
               </p>
             </div>
             <div className="about-image">
-              <img src="/logo.png" alt="PEN Club" />
+              <img src="/logo.jpeg" alt="PEN Club" />
             </div>
           </div>
         </div>
@@ -43,27 +42,27 @@ const About = () => {
           <div className="mission-grid">
             <div className="mission-card">
               <div className="mission-icon">🎯</div>
-              <h3>Our Vision</h3>
+              <h3>Our Goal</h3>
               <p>
-                To be the premier community where professionals and enthusiasts 
-                come together to create unforgettable experiences while building 
-                lasting relationships.
+                To bring together Azerbaijani youth living in Poland and organize 
+                social and professional events that make leisure time productive 
+                and enjoyable.
               </p>
             </div>
             <div className="mission-card">
               <div className="mission-icon">💡</div>
-              <h3>Our Values</h3>
+              <h3>Our Community</h3>
               <p>
-                Inclusivity, creativity, authenticity, and fun. We believe in 
-                creating an environment where everyone feels welcome and valued.
+                Building a strong, supportive community through games, social 
+                connections, and shared experiences that create lasting friendships.
               </p>
             </div>
             <div className="mission-card">
               <div className="mission-icon">🚀</div>
-              <h3>Our Goal</h3>
+              <h3>Our Achievement</h3>
               <p>
-                To facilitate meaningful connections through engaging activities 
-                that bring out the best in people and create lasting memories.
+                With 50+ events organized and counting, we continue to grow and 
+                create opportunities for our community to thrive together.
               </p>
             </div>
           </div>
@@ -72,45 +71,56 @@ const About = () => {
 
       <section className="section values-section">
         <div className="container">
-          <h2 className="section-title">What Makes Us Different</h2>
+          <h2 className="section-title">What We Organize</h2>
           <div className="values-list">
             <div className="value-item">
               <span className="value-number">01</span>
               <div className="value-content">
-                <h3>Community First</h3>
+                <h3>Sports Games ⚽️🎾🏓</h3>
                 <p>
-                  We prioritize building a supportive and inclusive community where 
-                  everyone can thrive and feel at home.
+                  Football, tennis, table tennis, and various sports activities that 
+                  keep our community active, healthy, and connected through friendly 
+                  competition.
                 </p>
               </div>
             </div>
             <div className="value-item">
               <span className="value-number">02</span>
               <div className="value-content">
-                <h3>Fun & Professional</h3>
+                <h3>Intellectual Competitions 🎓</h3>
                 <p>
-                  We strike the perfect balance between entertainment and professional 
-                  networking, making every event valuable and enjoyable.
+                  Quiz nights, trivia competitions, and brain-teasing challenges that 
+                  stimulate minds and encourage learning in a fun, competitive environment.
                 </p>
               </div>
             </div>
             <div className="value-item">
               <span className="value-number">03</span>
               <div className="value-content">
-                <h3>Diverse Activities</h3>
+                <h3>Mafia / Board Games 🕵️‍♂️🕵️</h3>
                 <p>
-                  From game nights to workshops, we offer a wide range of activities 
-                  that cater to different interests and preferences.
+                  Strategic Mafia games, board game nights, and card games that bring 
+                  people together for hours of entertainment and social bonding.
                 </p>
               </div>
             </div>
             <div className="value-item">
               <span className="value-number">04</span>
               <div className="value-content">
-                <h3>Lasting Connections</h3>
+                <h3>Picnics & Social Meetups 🪵🧺</h3>
                 <p>
-                  We focus on creating opportunities for genuine connections that 
-                  extend beyond our events.
+                  Outdoor gatherings, picnics, and casual meetups that allow our 
+                  community to relax, socialize, and enjoy nature together.
+                </p>
+              </div>
+            </div>
+            <div className="value-item">
+              <span className="value-number">05</span>
+              <div className="value-content">
+                <h3>Networking & Professional Events 🗽🖇️</h3>
+                <p>
+                  Career development workshops, professional networking sessions, and 
+                  mentorship opportunities that help our community grow professionally.
                 </p>
               </div>
             </div>

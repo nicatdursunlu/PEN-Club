@@ -1,51 +1,104 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../styles/Events.css'
 
 const Events = () => {
+  const navigate = useNavigate()
   const upcomingEvents = [
     {
-      id: 1,
-      title: 'Game Night Extravaganza',
-      date: 'March 15, 2024',
-      time: '7:00 PM - 11:00 PM',
-      location: 'PEN Club Lounge',
-      description: 'Join us for an evening of board games, video games, and friendly competition. Prizes for winners!',
-      category: 'Entertainment'
+      id: 'football-tournament-march-2026',
+      title: 'Football Tournament',
+      date: 'March 15, 2026',
+      time: '3:00 PM - 6:00 PM',
+      location: 'City Sports Complex',
+      description: 'Join us for an exciting football tournament! Form teams and compete for the championship trophy.',
+      category: 'Sports',
+      hasDetailPage: true
     },
     {
-      id: 2,
-      title: 'Professional Networking Mixer',
-      date: 'March 22, 2024',
-      time: '6:00 PM - 9:00 PM',
-      location: 'Downtown Conference Center',
-      description: 'Connect with professionals from various industries in a relaxed, fun atmosphere.',
-      category: 'Networking'
+      id: 'mafia-night-march-2026',
+      title: 'Mafia Night',
+      date: 'March 22, 2026',
+      time: '7:00 PM - 11:00 PM',
+      location: 'Community Center',
+      description: 'Strategic Mafia game night with multiple rounds. Test your detective skills and social deduction!',
+      category: 'Games',
+      hasDetailPage: true
     },
     {
       id: 3,
-      title: 'Creative Workshop Series',
-      date: 'March 29, 2024',
-      time: '2:00 PM - 5:00 PM',
-      location: 'PEN Club Studio',
-      description: 'Unleash your creativity with hands-on workshops in art, music, and design.',
-      category: 'Workshop'
+      title: 'Professional Networking Event',
+      date: 'March 29, 2026',
+      time: '6:00 PM - 9:00 PM',
+      location: 'Business Hub Warsaw',
+      description: 'Connect with Azerbaijani professionals in Poland. Career development and mentorship opportunities.',
+      category: 'Networking'
+    },
+    {
+      id: 4,
+      title: 'Spring Picnic',
+      date: 'April 5, 2026',
+      time: '12:00 PM - 5:00 PM',
+      location: 'Łazienki Park',
+      description: 'Outdoor gathering with games, food, and socializing. Bring your friends and enjoy the spring weather!',
+      category: 'Social'
+    },
+    {
+      id: 5,
+      title: 'Intellectual Quiz Competition',
+      date: 'April 12, 2026',
+      time: '7:00 PM - 10:00 PM',
+      location: 'University Hall',
+      description: 'Test your knowledge in various categories. Form teams and compete for exciting prizes!',
+      category: 'Intellectual'
+    },
+    {
+      id: 6,
+      title: 'Table Tennis Championship',
+      date: 'April 19, 2026',
+      time: '4:00 PM - 8:00 PM',
+      location: 'Sports Arena',
+      description: 'Singles and doubles table tennis tournament. All skill levels welcome!',
+      category: 'Sports'
     }
   ]
 
   const pastEvents = [
     {
-      id: 1,
-      title: 'Annual PEN Club Gala',
-      date: 'February 14, 2024',
-      attendees: 150,
-      description: 'Our biggest event of the year with entertainment, networking, and celebration.'
+      id: 'job-networking-meetup-feb-2026',
+      title: 'Job Networking & Support Meetup',
+      date: 'February 15, 2026',
+      attendees: 28,
+      description: '🚀 Real support between job seekers and employed professionals. CV/LinkedIn improvement, networking, and building strong relationships.',
+      hasDetailPage: true
     },
     {
       id: 2,
-      title: 'Winter Sports Day',
-      date: 'January 20, 2024',
-      attendees: 80,
-      description: 'Outdoor activities and team building in a winter wonderland setting.'
+      title: 'Career Development Workshop',
+      date: 'February 25, 2026',
+      attendees: 60,
+      description: 'Professional networking and career guidance session with industry experts.'
+    },
+    {
+      id: 3,
+      title: 'Board Games Marathon',
+      date: 'February 10, 2026',
+      attendees: 35,
+      description: 'All-day board games event featuring Mafia, Monopoly, and various strategy games.'
+    },
+    {
+      id: 4,
+      title: 'Winter Football Tournament',
+      date: 'January 20, 2026',
+      attendees: 45,
+      description: 'Intense football matches despite the cold weather. Great team spirit and competition!'
+    },
+    {
+      id: 5,
+      title: 'New Year Celebration 2026',
+      date: 'December 31, 2025',
+      attendees: 120,
+      description: 'Celebrated the new year with games, music, and networking. Memorable night for the community!'
     }
   ]
 
@@ -54,7 +107,7 @@ const Events = () => {
       <section className="events-hero">
         <div className="container">
           <h1>Events</h1>
-          <p>Discover exciting opportunities to play, enjoy, and network</p>
+          <p>Join 50+ amazing events and counting! Sports, games, networking, and more.</p>
         </div>
       </section>
 
@@ -81,7 +134,16 @@ const Events = () => {
                   </div>
                 </div>
                 <p className="event-description">{event.description}</p>
-                <button className="btn">Register Now</button>
+                {event.hasDetailPage ? (
+                  <button 
+                    className="btn" 
+                    onClick={() => navigate(`/events/${event.id}`)}
+                  >
+                    View Details
+                  </button>
+                ) : (
+                  <button className="btn">Register Now</button>
+                )}
               </div>
             ))}
           </div>
@@ -93,11 +155,19 @@ const Events = () => {
           <h2 className="section-title">Past Events</h2>
           <div className="past-events-list">
             {pastEvents.map((event) => (
-              <div key={event.id} className="past-event-card">
+              <div 
+                key={event.id} 
+                className={`past-event-card ${event.hasDetailPage ? 'clickable' : ''}`}
+                onClick={() => event.hasDetailPage && navigate(`/events/${event.id}`)}
+                style={{ cursor: event.hasDetailPage ? 'pointer' : 'default' }}
+              >
                 <div className="past-event-info">
                   <h3>{event.title}</h3>
                   <p className="past-event-date">{event.date}</p>
                   <p className="past-event-description">{event.description}</p>
+                  {event.hasDetailPage && (
+                    <span className="view-details-link">View Details →</span>
+                  )}
                 </div>
                 <div className="past-event-stats">
                   <div className="stat">
@@ -114,10 +184,10 @@ const Events = () => {
       <section className="section event-cta">
         <div className="container">
           <div className="cta-content">
-            <h2>Want to Host an Event?</h2>
+            <h2>Join Our Community!</h2>
             <p>
-              Have an idea for an event? We'd love to hear from you! 
-              Contact us to discuss hosting your own PEN Club event.
+              Be part of the Azerbaijani youth community in Poland. Don't miss out on 
+              sports, games, networking, and social events. Contact us to get involved!
             </p>
             <a href="/contact" className="btn">Contact Us</a>
           </div>

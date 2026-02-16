@@ -1,22 +1,18 @@
 IMPORTANT: Logo Setup Instructions
 ===================================
 
-Please save your PEN Club logo image as "logo.png" in this public folder.
+Please save your PEN Club logo image as "logo.jpeg" in this public folder.
 
 The logo should be:
-- Named exactly: logo.png
-- Format: PNG (recommended for transparency)
+- Named exactly: logo.jpeg
+- Format: JPEG
 - Recommended size: 500x500 pixels or similar square/rectangular format
 - The logo you provided in the chat should be saved here
 
-Once you save the logo as "logo.png" in this folder, it will automatically appear throughout the website:
+Once you save the logo as "logo.jpeg" in this folder, it will automatically appear throughout the website:
 - In the navbar
 - On the home page hero section
 - On the about page
 - As the favicon in the browser tab
 
-If you need to use a different image format (jpg, svg, etc.), you can update the references in:
-- index.html (line 5 for favicon)
-- src/components/Navbar.jsx (line 38)
-- src/components/Hero.jsx (line 24)
-- src/pages/About.jsx (line 32)
+✅ All references have been updated to use logo.jpeg format.

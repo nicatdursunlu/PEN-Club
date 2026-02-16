@@ -132,6 +132,17 @@
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
+.past-event-card.clickable {
+  cursor: pointer;
+}
+
+.past-event-card.clickable:hover {
+  transform: translateX(15px);
+  box-shadow: 0 8px 25px rgba(255, 107, 53, 0.25);
+  border-left-color: var(--accent-color);
+  background-color: white;
+}
+
 .past-event-info h3 {
   color: var(--primary-color);
   font-size: 1.5rem;
@@ -147,7 +158,21 @@
 .past-event-description {
   color: var(--text-dark);
   line-height: 1.6;
-  margin-bottom: 0;
+  margin-bottom: 0.5rem;
+}
+
+.view-details-link {
+  display: inline-block;
+  color: var(--secondary-color);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  transition: var(--transition);
+}
+
+.past-event-card.clickable:hover .view-details-link {
+  transform: translateX(5px);
+  color: var(--accent-color);
 }
 
 .past-event-stats {
