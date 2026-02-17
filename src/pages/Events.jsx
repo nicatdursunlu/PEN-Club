@@ -94,6 +94,22 @@ const Events = () => {
       description: 'Intense football matches despite the cold weather. Great team spirit and competition!'
     },
     {
+      id: 'outdoor-volleyball-sept-2025',
+      title: 'Outdoor Volleyball - Last Summer Games',
+      date: 'September 12, 2025',
+      attendees: 32,
+      description: '🏐 Final outdoor volleyball session before winter! Summer is almost over - once the weather gets colder, games will move indoors (paid). Great turnout for the last outdoor match!',
+      hasDetailPage: true
+    },
+    {
+      id: 'summer-picnic-aug-2025',
+      title: 'Summer Picnic & Games Festival',
+      date: 'August 16, 2025',
+      attendees: 65,
+      description: '🌿 Epic outdoor picnic with volleyball, mafia, intellectual games, board games, music, pizza, and samovar tea! Full and basic packages available. Unforgettable day of fun and community bonding.',
+      hasDetailPage: true
+    },
+    {
       id: 5,
       title: 'New Year Celebration 2026',
       date: 'December 31, 2025',

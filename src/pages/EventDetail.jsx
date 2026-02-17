@@ -12,7 +12,7 @@ const EventDetail = () => {
       title: 'Job Networking & Support Meetup',
       date: 'February 15, 2026',
       time: '12:00 PM - 2:00 PM',
-      location: 'Warsaw, Poland',
+      location: 'Green Caffè Nero, Warsaw, Poland',
       category: 'Networking',
       status: 'completed',
       attendees: 28,
@@ -72,7 +72,9 @@ Throughout the two-hour session, attendees engaged in deep conversations about n
           caption: 'Our amazing community coming together for networking and support'
         }
       ],
-      organizer: 'PEN Club Team'
+      organizer: 'PEN Club Team',
+      locationLink: 'https://maps.app.goo.gl/trXVGZfHtWRW1PmU9',
+      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2444.8582558091102!2d21.0217404!3d52.209623300000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471eccdefa5c150b%3A0x2cd5168208e55a86!2sGreen%20Caff%C3%A8%20Nero!5e0!3m2!1sen!2spl!4v1771243121410!5m2!1sen!2spl'
     },
     'football-tournament-march-2026': {
       title: 'Football Tournament',
@@ -113,6 +115,93 @@ Throughout the two-hour session, attendees engaged in deep conversations about n
       goal: 'Entertainment and social bonding through strategic gameplay.',
       images: [],
       organizer: 'PEN Club Games Team'
+    },
+    'summer-picnic-aug-2025': {
+      title: 'Summer Picnic & Games Festival',
+      date: 'August 16, 2025',
+      time: '12:00 PM - 6:00 PM',
+      location: 'Outdoor Park, Warsaw',
+      category: 'Social',
+      status: 'completed',
+      attendees: 65,
+      description: '🌿 Epic outdoor picnic with volleyball, mafia, intellectual games, board games, music, pizza, and samovar tea!',
+      fullDescription: `On August 16th, 2025, PEN Club organized one of the most memorable events of the summer - a grand picnic and games festival that brought together 65 members of our vibrant community. This wasn't just another outdoor gathering; it was a celebration of friendship, culture, and the joy of spending quality time together in nature.
+
+The event offered two participation packages to accommodate everyone's preferences. The Full Package (40 AZN) included delicious pizza along with all activities, while the Basic Package (20 AZN) allowed participants to bring their own food and enjoy all the games and entertainment. This flexible approach ensured that everyone could join regardless of their budget or dietary preferences.
+
+From noon until evening, the park was filled with laughter, competitive spirit, and the warmth of community bonding. Multiple activity stations were set up across the venue - volleyball nets for sports enthusiasts, cozy spots for board games, areas for intellectual competitions with exciting prizes, and of course, the legendary Mafia game sessions that kept everyone on their toes. The highlight for many was the traditional Azerbaijani samovar tea service, which added a special cultural touch to the gathering and reminded everyone of home. Music played throughout the day, creating the perfect atmosphere for both energetic activities and relaxed conversations. The combination of sports, strategy games, intellectual challenges, delicious food, and refreshing drinks made this event truly unforgettable.`,
+      eventHighlights: [
+        '65 participants enjoying a full day of activities',
+        'Perfect summer weather for outdoor celebration',
+        'Multiple volleyball matches with rotating teams',
+        'Intense Mafia game sessions with experienced moderators',
+        'Intellectual quiz competitions with prizes for winners',
+        'Variety of board games for all ages and interests',
+        'Live music creating festive atmosphere',
+        'Traditional Azerbaijani samovar tea service',
+        'Pizza feast and cold refreshing drinks',
+        'Successful blend of sports, games, and cultural elements'
+      ],
+      highlights: [
+        'Volleyball matches for sports enthusiasts 🏐',
+        'Strategic Mafia games testing social deduction skills 🕵️‍♂️',
+        'Intellectual competitions with exciting prizes 🧠',
+        'Board games for relaxed entertainment 🎲',
+        'Live music and dancing 🎵',
+        'Delicious pizza and snacks 🍕',
+        'Cold refreshing drinks 🍹',
+        'Traditional samovar tea experience ☕',
+        'Two package options (Full & Basic) for flexibility',
+        'All-day entertainment from noon to evening'
+      ],
+      goal: "Creating an unforgettable summer experience that combines sports, intellectual activities, cultural traditions, and community bonding in a beautiful outdoor setting.",
+      images: [],
+      organizer: 'PEN Club Events Team',
+      locationLink: 'https://maps.app.goo.gl/Gcipa9CUG4X9tMN98',
+      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2005.315747698821!2d20.999647943340328!3d52.214345269053595!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecd005716fdf3%3A0xf12423803d05bdd7!2sLe%C5%BCaki%20kamienne%20na%20Polu%20Mokotowskim!5e0!3m2!1sen!2spl!4v1771243596555!5m2!1sen!2spl',
+      pricing: {
+        full: '40 AZN (includes pizza)',
+        basic: '20 AZN (bring your own food)'
+      },
+      specialNote: '🌟 This event featured two package options: Full Package (40 AZN) with pizza included, and Basic Package (20 AZN) where participants brought their own food. Both packages included access to all activities, games, music, drinks, and the traditional samovar tea!'
+    },
+    'outdoor-volleyball-sept-2025': {
+      title: 'Outdoor Volleyball - Last Summer Games',
+      date: 'September 12, 2025',
+      time: '5:00 PM - 7:00 PM',
+      location: 'Volleyball Court, Warsaw',
+      category: 'Sports',
+      status: 'completed',
+      attendees: 32,
+      description: '🏐 Final outdoor volleyball session before winter!',
+      fullDescription: `On September 12th, 2025, PEN Club organized what would be the last outdoor volleyball session of the summer season. With 32 enthusiastic participants, this event marked a bittersweet moment as we prepared to transition from free outdoor games to indoor facilities for the colder months ahead.
+
+The weather was perfect for volleyball - warm but not too hot, with a gentle breeze that made the game even more enjoyable. Players of all skill levels came together, forming balanced teams and engaging in friendly but competitive matches. The atmosphere was filled with laughter, cheers, and the satisfying sound of the volleyball being spiked and served across the net.
+
+As the sun began to set, there was a collective appreciation for these outdoor sessions that had brought the community together throughout the summer. The event served as a reminder to make the most of the remaining warm days, as future games would require indoor venue bookings and associated costs.`,
+      eventHighlights: [
+        '32 active participants enjoying the last outdoor session',
+        'Perfect weather conditions for volleyball',
+        '6 competitive matches played throughout the event',
+        'Mix of experienced players and beginners playing together',
+        'Community bonding before transitioning to indoor games',
+        'Important announcement about winter indoor sessions',
+        'Group photo capturing the memorable moment'
+      ],
+      highlights: [
+        'Last chance to play outdoors before winter',
+        'Free participation (no venue costs)',
+        'All skill levels welcome',
+        'Great weather and atmosphere',
+        'Community building through sports',
+        'Information about upcoming indoor sessions'
+      ],
+      goal: "Making the most of summer weather while building community through sports before transitioning to indoor facilities.",
+      images: [],
+      organizer: 'PEN Club Sports Committee',
+      locationLink: 'https://maps.app.goo.gl/Rj57CGbqSG3mzAL89',
+      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2444.5506430935175!2d20.9962002!3d52.215213!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471eccc08052518d%3A0x88e686ef3b99e439!2sVolleyball%20Court!5e0!3m2!1sen!2spl!4v1771243149775!5m2!1sen!2spl',
+      specialNote: '⚠️ Important: Summer is almost over! Once the weather gets colder, games will be organized indoors (paid). Don\'t miss this opportunity for free outdoor volleyball!'
     }
   }
 
@@ -251,6 +340,50 @@ Throughout the two-hour session, attendees engaged in deep conversations about n
                   <p className="goal-text">{event.goal}</p>
                 </div>
               )}
+
+              {event.pricing && (
+                <div className="content-section pricing-section">
+                  <h2>Pricing Options</h2>
+                  <div className="pricing-cards">
+                    <div className="pricing-card">
+                      <h3>💎 Full Package</h3>
+                      <p className="price">{event.pricing.full}</p>
+                      <p className="price-description">Includes pizza and all activities</p>
+                    </div>
+                    <div className="pricing-card">
+                      <h3>⭐ Basic Package</h3>
+                      <p className="price">{event.pricing.basic}</p>
+                      <p className="price-description">Bring your own food, enjoy all activities</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {event.mapEmbedUrl && (
+                <div className="content-section">
+                  <h2>Event Location</h2>
+                  <div className="map-container">
+                    <iframe
+                      src={event.mapEmbedUrl}
+                      width="100%"
+                      height="450"
+                      style={{ border: 0, borderRadius: '10px' }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Event Location Map"
+                    ></iframe>
+                    <a 
+                      href={event.locationLink} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="btn btn-outline map-link-btn"
+                    >
+                      📍 Open in Google Maps
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="event-sidebar">
@@ -268,6 +401,18 @@ Throughout the two-hour session, attendees engaged in deep conversations about n
                   <strong>Location:</strong>
                   <span>{event.location}</span>
                 </div>
+                {event.locationLink && (
+                  <div className="detail-item">
+                    <a 
+                      href={event.locationLink} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="location-link"
+                    >
+                      📍 View on Map
+                    </a>
+                  </div>
+                )}
                 <div className="detail-item">
                   <strong>Category:</strong>
                   <span>{event.category}</span>
@@ -279,6 +424,14 @@ Throughout the two-hour session, attendees engaged in deep conversations about n
                   </div>
                 )}
               </div>
+
+              {event.specialNote && (
+                <div className="sidebar-card special-note-card">
+                  <div className="special-note">
+                    {event.specialNote}
+                  </div>
+                </div>
+              )}
 
               {event.status === 'upcoming' && (
                 <div className="sidebar-card register-card">
