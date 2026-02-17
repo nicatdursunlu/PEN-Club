@@ -1,6 +1,5 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import '../styles/Events.css'
 
 const Events = () => {
   const navigate = useNavigate()
@@ -120,75 +119,84 @@ const Events = () => {
 
   return (
     <div className="events-page">
-      <section className="events-hero">
-        <div className="container">
-          <h1>Events</h1>
-          <p>Join 50+ amazing events and counting! Sports, games, networking, and more.</p>
+      <section className="bg-gradient-to-r from-primary to-bg-dark py-20 text-white">
+        <div className="max-w-7xl mx-auto px-5 text-center">
+          <h1 className="text-5xl font-bold mb-4">Events</h1>
+          <p className="text-xl text-gray-200">Join 50+ amazing events and counting! Sports, games, networking, and more.</p>
         </div>
       </section>
 
-      <section className="section upcoming-events">
-        <div className="container">
-          <h2 className="section-title">Upcoming Events</h2>
-          <div className="events-grid">
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-5">
+          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">Upcoming Events</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {upcomingEvents.map((event) => (
-              <div key={event.id} className="event-card">
-                <div className="event-category">{event.category}</div>
-                <h3>{event.title}</h3>
-                <div className="event-details">
-                  <div className="event-detail">
-                    <span className="detail-icon">📅</span>
-                    <span>{event.date}</span>
-                  </div>
-                  <div className="event-detail">
-                    <span className="detail-icon">🕐</span>
-                    <span>{event.time}</span>
-                  </div>
-                  <div className="event-detail">
-                    <span className="detail-icon">📍</span>
-                    <span>{event.location}</span>
-                  </div>
+              <div key={event.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
+                <div className="bg-gradient-to-r from-secondary to-accent text-white px-4 py-2 text-sm font-semibold">
+                  {event.category}
                 </div>
-                <p className="event-description">{event.description}</p>
-                {event.hasDetailPage ? (
-                  <button 
-                    className="btn" 
-                    onClick={() => navigate(`/events/${event.id}`)}
-                  >
-                    View Details
-                  </button>
-                ) : (
-                  <button className="btn">Register Now</button>
-                )}
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold mb-4 text-gray-800">{event.title}</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <span>📅</span>
+                      <span>{event.date}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <span>🕐</span>
+                      <span>{event.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <span>📍</span>
+                      <span>{event.location}</span>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 mb-6 leading-relaxed">{event.description}</p>
+                  {event.hasDetailPage ? (
+                    <button 
+                      className="w-full px-6 py-3 bg-secondary text-white rounded-lg font-semibold hover:bg-opacity-90 transition-all duration-300 hover:scale-105"
+                      onClick={() => navigate(`/events/${event.id}`)}
+                    >
+                      View Details
+                    </button>
+                  ) : (
+                    <button className="w-full px-6 py-3 bg-secondary text-white rounded-lg font-semibold hover:bg-opacity-90 transition-all duration-300 hover:scale-105">
+                      Register Now
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section past-events">
-        <div className="container">
-          <h2 className="section-title">Past Events</h2>
-          <div className="past-events-list">
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-5">
+          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">Past Events</h2>
+          <div className="space-y-4">
             {pastEvents.map((event) => (
               <div 
                 key={event.id} 
-                className={`past-event-card ${event.hasDetailPage ? 'clickable' : ''}`}
+                className={`bg-white rounded-xl shadow-md p-6 transition-all duration-300 ${
+                  event.hasDetailPage ? 'hover:shadow-xl hover:-translate-y-1 cursor-pointer' : ''
+                }`}
                 onClick={() => event.hasDetailPage && navigate(`/events/${event.id}`)}
-                style={{ cursor: event.hasDetailPage ? 'pointer' : 'default' }}
               >
-                <div className="past-event-info">
-                  <h3>{event.title}</h3>
-                  <p className="past-event-date">{event.date}</p>
-                  <p className="past-event-description">{event.description}</p>
-                  {event.hasDetailPage && (
-                    <span className="view-details-link">View Details →</span>
-                  )}
-                </div>
-                <div className="past-event-stats">
-                  <div className="stat">
-                    <span className="stat-number">{event.attendees}</span>
-                    <span className="stat-label">Attendees</span>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold mb-2 text-gray-800">{event.title}</h3>
+                    <p className="text-secondary font-semibold mb-2">{event.date}</p>
+                    <p className="text-gray-600 leading-relaxed">{event.description}</p>
+                    {event.hasDetailPage && (
+                      <span className="inline-block mt-3 text-secondary font-semibold hover:text-accent transition-colors">
+                        View Details →
+                      </span>
+                    )}
+                  </div>
+                  <div className="bg-gradient-to-br from-secondary to-accent text-white rounded-xl p-6 text-center min-w-[120px]">
+                    <div className="text-4xl font-bold">{event.attendees}</div>
+                    <div className="text-sm mt-1">Attendees</div>
                   </div>
                 </div>
               </div>
@@ -197,16 +205,16 @@ const Events = () => {
         </div>
       </section>
 
-      <section className="section event-cta">
-        <div className="container">
-          <div className="cta-content">
-            <h2>Join Our Community!</h2>
-            <p>
-              Be part of the Azerbaijani youth community in Poland. Don't miss out on 
-              sports, games, networking, and social events. Contact us to get involved!
-            </p>
-            <a href="/contact" className="btn">Contact Us</a>
-          </div>
+      <section className="py-20 bg-gradient-to-r from-secondary to-accent">
+        <div className="max-w-4xl mx-auto px-5 text-center">
+          <h2 className="text-4xl font-bold mb-6 text-white">Join Our Community!</h2>
+          <p className="text-xl text-white mb-8 leading-relaxed">
+            Be part of the Azerbaijani youth community in Poland. Don't miss out on 
+            sports, games, networking, and social events. Contact us to get involved!
+          </p>
+          <a href="/contact" className="inline-block px-10 py-4 bg-white text-secondary rounded-lg font-bold text-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg">
+            Contact Us
+          </a>
         </div>
       </section>
     </div>

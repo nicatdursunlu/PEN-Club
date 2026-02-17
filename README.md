@@ -1,149 +1,168 @@
 # PEN Club Website
 
-A modern, responsive website for PEN Club (Play, Enjoy, Network) built with React and Vite.
+![PEN Club Logo](public/logo.jpeg)
 
 ## About PEN Club
 
-PEN Club is a vibrant community where people come together to play, enjoy life, and build meaningful connections. Our events range from casual game nights to professional networking sessions, always maintaining the perfect balance between fun and purpose.
+**PEN Club** stands for **Play, Enjoy, Network** - a vibrant community for Azerbaijani youth in Poland. Our club brings together young people for sports, games, networking events, and social activities.
 
-## Features
+## 🚀 Features
 
+- **Modern React Application**: Built with React 18 and Vite for optimal performance
 - **Responsive Design**: Fully responsive layout that works on all devices
-- **Modern UI**: Clean and modern interface with smooth animations
-- **Navigation**: Easy-to-use navbar with active link highlighting
-- **Multiple Pages**:
-  - Home: Hero section with club introduction
-  - About: Information about PEN Club's mission and values
-  - Events: Upcoming and past events showcase
-  - Gallery: Photo gallery (coming soon)
-  - Contact: Contact form and information
+- **Tailwind CSS**: Utility-first CSS framework for rapid UI development
+- **React Router**: Seamless navigation between pages
+- **Interactive Components**: Engaging UI with smooth animations and transitions
 
-## Tech Stack
+## 📋 Pages
 
-- **React 18**: Modern React with hooks
-- **React Router**: Client-side routing
-- **Vite**: Fast build tool and development server
-- **CSS3**: Custom styling with CSS variables and animations
+- **Home**: Welcome page with hero section, features, and call-to-action
+- **About**: Information about PEN Club's mission and activities
+- **Events**: Upcoming and past events showcase
+- **Gallery**: Photo gallery (coming soon)
+- **Contact**: Contact form and information
 
-## Getting Started
+## 🛠️ Tech Stack
 
-### Prerequisites
+- **React 18.2.0**: JavaScript library for building user interfaces
+- **React Router DOM 6.20.0**: Declarative routing for React
+- **Vite 5.0.8**: Next-generation frontend tooling
+- **Tailwind CSS 3.4.0**: Utility-first CSS framework
+- **PostCSS & Autoprefixer**: CSS processing tools
 
-- Node.js (v14 or higher)
-- npm or yarn
+## 📦 Installation
 
-### Installation
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd PEN-Club
+   ```
 
-1. Clone the repository or navigate to the project directory:
-```bash
-cd PEN-Club
-```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+3. **Add your logo**
+   - Place your logo image in the `public` folder as `logo.jpeg`
 
-3. Add your logo:
-   - Place your `logo.png` file in the `public` folder
+## 🚀 Running the Application
 
-4. Start the development server:
+### Development Mode
 ```bash
 npm run dev
 ```
+The application will start on `http://localhost:3000` (or the next available port)
 
-5. Open your browser and visit:
+### Build for Production
+```bash
+npm run build
 ```
-http://localhost:3000
+This creates an optimized production build in the `dist` folder
+
+### Preview Production Build
+```bash
+npm run preview
 ```
 
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 PEN-Club/
 ├── public/
-│   └── logo.png
+│   └── logo.jpeg             # Club logo
 ├── src/
-│   ├── components/
-│   │   ├── Navbar.jsx
-│   │   ├── Footer.jsx
-│   │   └── Hero.jsx
-│   ├── pages/
-│   │   ├── Home.jsx
-│   │   ├── About.jsx
-│   │   ├── Events.jsx
-│   │   ├── Gallery.jsx
-│   │   └── Contact.jsx
-│   ├── styles/
-│   │   ├── global.css
-│   │   ├── Navbar.css
-│   │   ├── Footer.css
-│   │   ├── Hero.css
-│   │   ├── Home.css
-│   │   ├── About.css
-│   │   ├── Events.css
-│   │   ├── Gallery.css
-│   │   └── Contact.css
-│   ├── App.jsx
-│   ├── App.css
-│   └── index.jsx
-├── index.html
-├── package.json
-├── vite.config.js
-└── README.md
+│   ├── components/           # Reusable components
+│   │   ├── Navbar.jsx       # Navigation bar
+│   │   ├── Footer.jsx       # Footer component
+│   │   └── Hero.jsx         # Hero section
+│   ├── pages/               # Page components
+│   │   ├── Home.jsx         # Home page
+│   │   ├── About.jsx        # About page
+│   │   ├── Events.jsx       # Events page
+│   │   ├── EventDetail.jsx  # Event detail page
+│   │   ├── Gallery.jsx      # Gallery page
+│   │   └── Contact.jsx      # Contact page
+│   ├── styles/              # Global styles
+│   │   └── global.css       # Global CSS with Tailwind
+│   ├── App.jsx              # Main app component
+│   ├── App.css              # App-specific styles
+│   └── index.jsx            # Entry point
+├── index.html               # HTML template
+├── tailwind.config.js       # Tailwind configuration
+├── postcss.config.js        # PostCSS configuration
+├── vite.config.js           # Vite configuration
+└── package.json             # Project dependencies
+
 ```
 
-## Customization
+## 🎨 Customization
 
 ### Colors
+The color scheme is defined in `tailwind.config.js`:
+- **Primary**: `#3d2b2e` (Dark purple/brown)
+- **Secondary**: `#ff6b35` (Orange)
+- **Accent**: `#f7931e` (Light orange)
 
-The website uses CSS variables for easy customization. Edit `src/styles/global.css`:
+### Fonts
+Default font family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif
 
-```css
-:root {
-  --primary-color: #3d2b2e;
-  --secondary-color: #ff6b35;
-  --accent-color: #f7931e;
-  /* ... other colors */
-}
-```
+### Modifying Content
+- Update page content in `src/pages/`
+- Modify components in `src/components/`
+- Adjust global styles in `src/styles/global.css`
 
-### Content
+## 🔧 Configuration Files
 
-- Update event information in `src/pages/Events.jsx`
-- Modify about content in `src/pages/About.jsx`
-- Customize contact details in `src/pages/Contact.jsx`
+### Tailwind Config (`tailwind.config.js`)
+- Custom colors and theme extensions
+- Custom animations (float, fade-in)
+- Responsive breakpoints
 
-## Future Enhancements
+### Vite Config (`vite.config.js`)
+- React plugin configuration
+- Development server settings
+- Build optimization
 
-- Member authentication and profiles
-- Event registration system
-- Photo gallery with real images
-- Blog section
-- Newsletter subscription
-- Social media integration
-- Admin dashboard for event management
+## 📱 Responsive Design
 
-## Contributing
+The website is fully responsive with breakpoints:
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
+
+## 🌐 Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## 📝 Future Enhancements
+
+- [ ] Add real event data and management system
+- [ ] Implement photo gallery with image uploads
+- [ ] Add user authentication and member profiles
+- [ ] Integrate with backend API
+- [ ] Add multilingual support (English/Azerbaijani)
+- [ ] Implement event registration system
+- [ ] Add social media integration
+- [ ] Create admin dashboard
+
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License.
 
-## Contact
+## 📞 Contact
 
-For questions or support, please contact:
-- Email: info@penclub.com
-- Phone: +1 (555) 123-4567
+For questions or suggestions, please contact us through the website's contact form or reach out via social media.
 
 ---
 
-Built with ❤️ by the PEN Club team
+**Made with ❤️ by PEN Club Team**
+
+*Play • Enjoy • Network*

@@ -1,6 +1,5 @@
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import '../styles/EventDetail.css'
 
 const EventDetail = () => {
   const { id } = useParams()
@@ -209,12 +208,15 @@ As the sun began to set, there was a collective appreciation for these outdoor s
 
   if (!event) {
     return (
-      <div className="event-detail-page">
-        <div className="container">
-          <div className="event-not-found">
-            <h1>Event Not Found</h1>
-            <p>Sorry, we couldn't find the event you're looking for.</p>
-            <button onClick={() => navigate('/events')} className="btn">
+      <div className="min-h-screen bg-gray-50 py-20">
+        <div className="max-w-7xl mx-auto px-5">
+          <div className="text-center py-20">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">Event Not Found</h1>
+            <p className="text-lg text-gray-600 mb-8">Sorry, we couldn't find the event you're looking for.</p>
+            <button 
+              onClick={() => navigate('/events')} 
+              className="px-8 py-3 bg-secondary text-white rounded-lg font-semibold hover:bg-opacity-90 transition-all"
+            >
               Back to Events
             </button>
           </div>
@@ -224,35 +226,44 @@ As the sun began to set, there was a collective appreciation for these outdoor s
   }
 
   return (
-    <div className="event-detail-page">
-      <section className="event-detail-hero">
-        <div className="container">
-          <button onClick={() => navigate('/events')} className="back-button">
+    <div className="event-detail-page bg-gray-50">
+      <section className="bg-gradient-to-r from-primary to-bg-dark py-16 text-white">
+        <div className="max-w-7xl mx-auto px-5">
+          <button 
+            onClick={() => navigate('/events')} 
+            className="mb-6 flex items-center gap-2 text-white hover:text-secondary transition-colors font-semibold"
+          >
             ← Back to Events
           </button>
-          <div className="event-header">
-            <span className={`event-status ${event.status}`}>
+          <div className="flex flex-wrap gap-3 mb-4">
+            <span className={`px-4 py-2 rounded-full font-semibold ${
+              event.status === 'completed' 
+                ? 'bg-green-500 text-white' 
+                : 'bg-blue-500 text-white'
+            }`}>
               {event.status === 'completed' ? '✓ Completed' : '📅 Upcoming'}
             </span>
-            <span className="event-category-badge">{event.category}</span>
+            <span className="px-4 py-2 bg-secondary text-white rounded-full font-semibold">
+              {event.category}
+            </span>
           </div>
-          <h1>{event.title}</h1>
-          <div className="event-meta">
-            <div className="meta-item">
-              <span className="meta-icon">📅</span>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">{event.title}</h1>
+          <div className="flex flex-wrap gap-6 text-lg">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">📅</span>
               <span>{event.date}</span>
             </div>
-            <div className="meta-item">
-              <span className="meta-icon">🕐</span>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🕐</span>
               <span>{event.time}</span>
             </div>
-            <div className="meta-item">
-              <span className="meta-icon">📍</span>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">📍</span>
               <span>{event.location}</span>
             </div>
             {event.attendees && (
-              <div className="meta-item">
-                <span className="meta-icon">👥</span>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">👥</span>
                 <span>{event.attendees} Attendees</span>
               </div>
             )}
@@ -260,23 +271,23 @@ As the sun began to set, there was a collective appreciation for these outdoor s
         </div>
       </section>
 
-      <section className="section event-content">
-        <div className="container">
-          <div className="event-detail-grid">
-            <div className="event-main-content">
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-8">
               {event.images && event.images.length > 0 && (
-                <div className="content-section event-gallery">
-                  <h2>Event Photos</h2>
-                  <div className="gallery-grid">
+                <div className="bg-white rounded-xl shadow-lg p-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-6">Event Photos</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {event.images.map((image, index) => (
-                      <div key={index} className="gallery-item">
+                      <div key={index} className="rounded-lg overflow-hidden shadow-md">
                         <img 
                           src={image.url} 
                           alt={image.alt}
-                          className="gallery-image"
+                          className="w-full h-64 object-cover"
                         />
                         {image.caption && (
-                          <p className="image-caption">{image.caption}</p>
+                          <p className="p-3 text-sm text-gray-600 bg-gray-50">{image.caption}</p>
                         )}
                       </div>
                     ))}
@@ -284,21 +295,21 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                 </div>
               )}
 
-              <div className="content-section">
-                <h2>About This Event</h2>
-                <p className="event-description">{event.fullDescription}</p>
+              <div className="bg-white rounded-xl shadow-lg p-8">
+                <h2 className="text-3xl font-bold text-gray-800 mb-6">About This Event</h2>
+                <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-line">{event.fullDescription}</p>
               </div>
 
               {event.agenda && event.agenda.length > 0 && (
-                <div className="content-section">
-                  <h2>Event Agenda</h2>
-                  <div className="agenda-timeline">
+                <div className="bg-white rounded-xl shadow-lg p-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-6">Event Agenda</h2>
+                  <div className="space-y-6">
                     {event.agenda.map((item, index) => (
-                      <div key={index} className="agenda-item">
-                        <div className="agenda-time">{item.time}</div>
-                        <div className="agenda-content">
-                          <h3 className="agenda-title">{item.title}</h3>
-                          <p className="agenda-description">{item.description}</p>
+                      <div key={index} className="flex gap-4 pb-6 border-b border-gray-200 last:border-0">
+                        <div className="flex-shrink-0 w-32 text-secondary font-bold">{item.time}</div>
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
+                          <p className="text-gray-600 leading-relaxed">{item.description}</p>
                         </div>
                       </div>
                     ))}
@@ -307,13 +318,13 @@ As the sun began to set, there was a collective appreciation for these outdoor s
               )}
 
               {event.eventHighlights && event.eventHighlights.length > 0 && (
-                <div className="content-section">
-                  <h2>Event Highlights</h2>
-                  <ul className="highlights-list">
+                <div className="bg-white rounded-xl shadow-lg p-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-6">Event Highlights</h2>
+                  <ul className="space-y-3">
                     {event.eventHighlights.map((highlight, index) => (
-                      <li key={index}>
-                        <span className="highlight-icon">🎯</span>
-                        {highlight}
+                      <li key={index} className="flex items-start gap-3 text-gray-700">
+                        <span className="text-2xl flex-shrink-0">🎯</span>
+                        <span className="leading-relaxed">{highlight}</span>
                       </li>
                     ))}
                   </ul>
@@ -321,13 +332,13 @@ As the sun began to set, there was a collective appreciation for these outdoor s
               )}
 
               {event.highlights && event.highlights.length > 0 && (
-                <div className="content-section">
-                  <h2>What Participants Gained</h2>
-                  <ul className="highlights-list">
+                <div className="bg-white rounded-xl shadow-lg p-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-6">What Participants Gained</h2>
+                  <ul className="space-y-3">
                     {event.highlights.map((highlight, index) => (
-                      <li key={index}>
-                        <span className="highlight-icon">✔</span>
-                        {highlight}
+                      <li key={index} className="flex items-start gap-3 text-gray-700">
+                        <span className="text-secondary text-xl flex-shrink-0">✔</span>
+                        <span className="leading-relaxed">{highlight}</span>
                       </li>
                     ))}
                   </ul>
@@ -335,34 +346,34 @@ As the sun began to set, there was a collective appreciation for these outdoor s
               )}
 
               {event.goal && (
-                <div className="content-section goal-section">
-                  <h2>Our Goal</h2>
-                  <p className="goal-text">{event.goal}</p>
+                <div className="bg-gradient-to-br from-secondary to-accent text-white rounded-xl shadow-lg p-8">
+                  <h2 className="text-3xl font-bold mb-4">Our Goal</h2>
+                  <p className="text-lg leading-relaxed">{event.goal}</p>
                 </div>
               )}
 
               {event.pricing && (
-                <div className="content-section pricing-section">
-                  <h2>Pricing Options</h2>
-                  <div className="pricing-cards">
-                    <div className="pricing-card">
-                      <h3>💎 Full Package</h3>
-                      <p className="price">{event.pricing.full}</p>
-                      <p className="price-description">Includes pizza and all activities</p>
+                <div className="bg-white rounded-xl shadow-lg p-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-6">Pricing Options</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="border-2 border-secondary rounded-xl p-6 hover:shadow-xl transition-shadow">
+                      <h3 className="text-2xl font-bold text-gray-800 mb-3">💎 Full Package</h3>
+                      <p className="text-3xl font-bold text-secondary mb-2">{event.pricing.full}</p>
+                      <p className="text-gray-600">Includes pizza and all activities</p>
                     </div>
-                    <div className="pricing-card">
-                      <h3>⭐ Basic Package</h3>
-                      <p className="price">{event.pricing.basic}</p>
-                      <p className="price-description">Bring your own food, enjoy all activities</p>
+                    <div className="border-2 border-gray-300 rounded-xl p-6 hover:shadow-xl transition-shadow">
+                      <h3 className="text-2xl font-bold text-gray-800 mb-3">⭐ Basic Package</h3>
+                      <p className="text-3xl font-bold text-secondary mb-2">{event.pricing.basic}</p>
+                      <p className="text-gray-600">Bring your own food, enjoy all activities</p>
                     </div>
                   </div>
                 </div>
               )}
 
               {event.mapEmbedUrl && (
-                <div className="content-section">
-                  <h2>Event Location</h2>
-                  <div className="map-container">
+                <div className="bg-white rounded-xl shadow-lg p-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-6">Event Location</h2>
+                  <div className="space-y-4">
                     <iframe
                       src={event.mapEmbedUrl}
                       width="100%"
@@ -372,12 +383,13 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
                       title="Event Location Map"
+                      className="rounded-lg"
                     ></iframe>
                     <a 
                       href={event.locationLink} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="btn btn-outline map-link-btn"
+                      className="inline-block px-6 py-3 bg-white border-2 border-secondary text-secondary rounded-lg font-semibold hover:bg-secondary hover:text-white transition-all"
                     >
                       📍 Open in Google Maps
                     </a>
@@ -386,76 +398,78 @@ As the sun began to set, there was a collective appreciation for these outdoor s
               )}
             </div>
 
-            <div className="event-sidebar">
-              <div className="sidebar-card">
-                <h3>Event Details</h3>
-                <div className="detail-item">
-                  <strong>Date:</strong>
-                  <span>{event.date}</span>
-                </div>
-                <div className="detail-item">
-                  <strong>Time:</strong>
-                  <span>{event.time}</span>
-                </div>
-                <div className="detail-item">
-                  <strong>Location:</strong>
-                  <span>{event.location}</span>
-                </div>
-                {event.locationLink && (
-                  <div className="detail-item">
-                    <a 
-                      href={event.locationLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="location-link"
-                    >
-                      📍 View on Map
-                    </a>
+            <div className="lg:col-span-1 space-y-6">
+              <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6">Event Details</h3>
+                <div className="space-y-4">
+                  <div className="flex flex-col gap-1">
+                    <strong className="text-gray-700 font-semibold">Date:</strong>
+                    <span className="text-gray-600">{event.date}</span>
                   </div>
-                )}
-                <div className="detail-item">
-                  <strong>Category:</strong>
-                  <span>{event.category}</span>
-                </div>
-                {event.organizer && (
-                  <div className="detail-item">
-                    <strong>Organizer:</strong>
-                    <span>{event.organizer}</span>
+                  <div className="flex flex-col gap-1">
+                    <strong className="text-gray-700 font-semibold">Time:</strong>
+                    <span className="text-gray-600">{event.time}</span>
                   </div>
-                )}
+                  <div className="flex flex-col gap-1">
+                    <strong className="text-gray-700 font-semibold">Location:</strong>
+                    <span className="text-gray-600">{event.location}</span>
+                  </div>
+                  {event.locationLink && (
+                    <div className="pt-2">
+                      <a 
+                        href={event.locationLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-secondary hover:text-accent font-semibold transition-colors"
+                      >
+                        📍 View on Map
+                      </a>
+                    </div>
+                  )}
+                  <div className="flex flex-col gap-1">
+                    <strong className="text-gray-700 font-semibold">Category:</strong>
+                    <span className="text-gray-600">{event.category}</span>
+                  </div>
+                  {event.organizer && (
+                    <div className="flex flex-col gap-1">
+                      <strong className="text-gray-700 font-semibold">Organizer:</strong>
+                      <span className="text-gray-600">{event.organizer}</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {event.specialNote && (
-                <div className="sidebar-card special-note-card">
-                  <div className="special-note">
+                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-400 rounded-xl shadow-lg p-6">
+                  <div className="text-gray-800 leading-relaxed">
                     {event.specialNote}
                   </div>
                 </div>
               )}
 
               {event.status === 'upcoming' && (
-                <div className="sidebar-card register-card">
-                  <h3>Interested?</h3>
-                  <p>Contact us to register for this event</p>
+                <div className="bg-gradient-to-br from-secondary to-accent text-white rounded-xl shadow-lg p-6">
+                  <h3 className="text-2xl font-bold mb-3">Interested?</h3>
+                  <p className="mb-4">Contact us to register for this event</p>
                   <button 
                     onClick={() => navigate('/contact')} 
-                    className="btn btn-register"
+                    className="w-full px-6 py-3 bg-white text-secondary rounded-lg font-bold hover:bg-gray-100 transition-all"
                   >
                     Contact Us
                   </button>
                 </div>
               )}
 
-              <div className="sidebar-card share-card">
-                <h3>Share Event</h3>
-                <div className="share-buttons">
-                  <button className="share-btn" aria-label="Share on Facebook">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">Share Event</h3>
+                <div className="flex flex-col gap-3">
+                  <button className="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold" aria-label="Share on Facebook">
                     📘 Facebook
                   </button>
-                  <button className="share-btn" aria-label="Share on WhatsApp">
+                  <button className="flex items-center gap-3 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold" aria-label="Share on WhatsApp">
                     💬 WhatsApp
                   </button>
-                  <button className="share-btn" aria-label="Share on Instagram">
+                  <button className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 transition-opacity font-semibold" aria-label="Share on Instagram">
                     📷 Instagram
                   </button>
                 </div>
@@ -465,11 +479,14 @@ As the sun began to set, there was a collective appreciation for these outdoor s
         </div>
       </section>
 
-      <section className="section related-events">
-        <div className="container">
-          <h2>More Events</h2>
-          <p>Check out other events from PEN Club</p>
-          <button onClick={() => navigate('/events')} className="btn btn-outline">
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-5 text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">More Events</h2>
+          <p className="text-lg text-gray-600 mb-8">Check out other events from PEN Club</p>
+          <button 
+            onClick={() => navigate('/events')} 
+            className="px-8 py-3 bg-white border-2 border-secondary text-secondary rounded-lg font-semibold hover:bg-secondary hover:text-white transition-all"
+          >
             View All Events
           </button>
         </div>

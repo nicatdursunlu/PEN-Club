@@ -1,5 +1,4 @@
 import React from 'react'
-import '../styles/Gallery.css'
 
 const Gallery = () => {
   // Placeholder for future gallery images
@@ -14,46 +13,58 @@ const Gallery = () => {
 
   return (
     <div className="gallery-page">
-      <section className="gallery-hero">
-        <div className="container">
-          <h1>Gallery</h1>
-          <p>Capturing moments of play, enjoyment, and connection</p>
+      <section className="bg-gradient-to-r from-primary to-bg-dark py-20 text-white">
+        <div className="max-w-7xl mx-auto px-5 text-center">
+          <h1 className="text-5xl font-bold mb-4">Gallery</h1>
+          <p className="text-xl text-gray-200">Capturing moments of play, enjoyment, and connection</p>
         </div>
       </section>
 
-      <section className="section gallery-content">
-        <div className="container">
-          <div className="gallery-filters">
-            <button className="filter-btn active">All</button>
-            <button className="filter-btn">Events</button>
-            <button className="filter-btn">Networking</button>
-            <button className="filter-btn">Workshops</button>
-            <button className="filter-btn">Activities</button>
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-5">
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <button className="px-6 py-2 bg-secondary text-white rounded-full font-semibold hover:bg-opacity-90 transition-all duration-300">
+              All
+            </button>
+            <button className="px-6 py-2 bg-gray-200 text-gray-700 rounded-full font-semibold hover:bg-gray-300 transition-all duration-300">
+              Events
+            </button>
+            <button className="px-6 py-2 bg-gray-200 text-gray-700 rounded-full font-semibold hover:bg-gray-300 transition-all duration-300">
+              Networking
+            </button>
+            <button className="px-6 py-2 bg-gray-200 text-gray-700 rounded-full font-semibold hover:bg-gray-300 transition-all duration-300">
+              Workshops
+            </button>
+            <button className="px-6 py-2 bg-gray-200 text-gray-700 rounded-full font-semibold hover:bg-gray-300 transition-all duration-300">
+              Activities
+            </button>
           </div>
 
-          <div className="gallery-grid">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {galleryItems.map((item) => (
-              <div key={item.id} className="gallery-item">
-                <div className="gallery-placeholder">
-                  <div className="placeholder-icon">📸</div>
-                  <div className="placeholder-text">
-                    <h3>{item.title}</h3>
-                    <span className="gallery-category">{item.category}</span>
+              <div key={item.id} className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center p-8">
+                  <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">📸</div>
+                  <div className="text-center">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
+                    <span className="inline-block px-4 py-1 bg-secondary text-white rounded-full text-sm font-semibold">
+                      {item.category}
+                    </span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="gallery-message">
-            <div className="message-box">
-              <h2>Gallery Coming Soon!</h2>
-              <p>
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-gradient-to-br from-secondary to-accent text-white rounded-2xl p-8 md:p-12 text-center shadow-2xl">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Gallery Coming Soon!</h2>
+              <p className="text-lg mb-4 leading-relaxed">
                 We're currently building our photo gallery to showcase all the amazing 
                 moments from our events. Check back soon to see photos from our game nights, 
                 networking mixers, workshops, and more!
               </p>
-              <p>
+              <p className="text-lg leading-relaxed">
                 In the meantime, follow us on social media to see the latest updates 
                 and event highlights.
               </p>

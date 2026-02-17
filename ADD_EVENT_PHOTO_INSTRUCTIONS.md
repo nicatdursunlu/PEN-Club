@@ -17,7 +17,7 @@ To add the event photo from yesterday's Job Networking meetup, please follow the
    │   ├── images/
    │   │   └── events/
    │   │       └── job-networking-feb-2026.jpg
-   │   ├── logo.png
+   ├── logo.jpeg
    │   └── index.html
    ```
 
