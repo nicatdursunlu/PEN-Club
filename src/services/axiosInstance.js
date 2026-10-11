@@ -5,8 +5,7 @@ export default createAuthenticatedClient({
   getSession,
   refresh: refreshAccessToken,
   expire: () => {
-    const role = getSession()?.role
     clearTokens()
-    window.location.href = role === 'ADMIN' ? '/admin/login' : '/login'
+    window.location.href = '/login'
   },
 })

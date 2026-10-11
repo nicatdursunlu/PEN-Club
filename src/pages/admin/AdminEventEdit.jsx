@@ -41,7 +41,7 @@ const AdminEventEdit = () => {
 
   const handleLogout = () => {
     logout()
-    navigate('/admin/login')
+    navigate('/login')
   }
 
   const handleSubmit = async (formValues) => {
@@ -77,6 +77,8 @@ const AdminEventEdit = () => {
 
   const handleStatusChange = async (action) => {
     if (saving || statusAction) return
+    if (action === 'publish' && eventStatus !== 'DRAFT') return
+    if (action === 'cancel' && !['DRAFT', 'PUBLISHED'].includes(eventStatus)) return
     setStatusAction(action)
     try {
       const data = await (action === 'publish' ? publishEvent(slug) : cancelEvent(slug))
@@ -209,7 +211,7 @@ const AdminEventEdit = () => {
                   {statusAction === 'publish' ? 'Publishing...' : 'Publish Event'}
                 </button>
                 <button type="button" onClick={() => handleStatusChange('cancel')}
-                  disabled={saving || !!statusAction || eventStatus === 'CANCELLED' || !eventStatus}
+                  disabled={saving || !!statusAction || !['DRAFT', 'PUBLISHED'].includes(eventStatus)}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
                   {statusAction === 'cancel' ? 'Cancelling...' : 'Cancel Event'}
                 </button>

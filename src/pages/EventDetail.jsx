@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { fetchEventBySlug } from '../services/eventsService'
 import EventRegistrationButton from '../components/EventRegistrationButton'
+import { canRegisterForEvent } from '../utils/eventLifecycle'
 
 const EventDetail = () => {
   const { id } = useParams()
@@ -17,7 +18,7 @@ const EventDetail = () => {
       setError(null)
       try {
         const data = await fetchEventBySlug(id)
-        setEvent(data)
+        setEvent(['PUBLISHED', 'COMPLETED'].includes(data.status?.toUpperCase()) ? data : null)
       } catch (err) {
         setError(err.message || 'Failed to load event details.')
       } finally {
@@ -77,7 +78,7 @@ const EventDetail = () => {
                   ? 'bg-green-500 text-white'
                   : 'bg-blue-500 text-white'
               }`}>
-                {event.status.toUpperCase() === 'COMPLETED' ? '✓ Completed' : '📅 Upcoming'}
+                {event.status.toUpperCase() === 'COMPLETED' ? '✓ Completed' : 'Published'}
               </span>
             )}
             {event.category && (
@@ -318,8 +319,8 @@ const EventDetail = () => {
               )}
 
               {/* Register CTA for upcoming events */}
-              {event.status && event.status.toUpperCase() === 'UPCOMING' && (
-                <EventRegistrationButton key={id} slug={event.slug || id} className="bg-white rounded-xl shadow-lg p-6">
+              {canRegisterForEvent(event) && (
+                <EventRegistrationButton key={id} event={event} slug={event.slug || id} className="bg-white rounded-xl shadow-lg p-6">
                   <h3 className="text-2xl font-bold mb-3">Join this event</h3>
                   <p className="text-gray-600 mb-4">Register with your PEN Club member account.</p>
                 </EventRegistrationButton>

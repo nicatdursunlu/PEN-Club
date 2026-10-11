@@ -1,5 +1,5 @@
-import memberAxiosInstance from './memberAxiosInstance'
-import { getMemberSession } from './memberAuthService'
+import axiosInstance from './axiosInstance'
+import { getSession } from './authService'
 
 export const EVENT_REGISTRATION_CHANGE = 'pen-event-registration-change'
 const pending = new Map()
@@ -25,7 +25,7 @@ const readRegistrations = (key) => {
   }
 }
 
-export const isEventRegistered = (slug, session = getMemberSession()) => {
+export const isEventRegistered = (slug, session = getSession('MEMBER')) => {
   const key = accountKey(session)
   if (!key) return false
   const cached = confirmed.get(`${key}:${slug}`)
@@ -54,7 +54,7 @@ const isDuplicateRegistration = (error) => {
 }
 
 export const registerForEvent = (slug) => {
-  const session = getMemberSession()
+  const session = getSession('MEMBER')
   if (!session) return Promise.reject(new Error('Please log in to register for this event.'))
   if (!slug) return Promise.reject(new Error('This event is missing its registration link.'))
   const key = accountKey(session)
@@ -64,7 +64,7 @@ export const registerForEvent = (slug) => {
 
   const registration = (async () => {
     try {
-      await memberAxiosInstance.post(
+      await axiosInstance.post(
         `/events/${encodeURIComponent(slug)}/register`,
         undefined,
         { _expectedAccessToken: session.accessToken },
@@ -83,7 +83,7 @@ export const registerForEvent = (slug) => {
 }
 
 export const unregisterFromEvent = (slug) => {
-  const session = getMemberSession()
+  const session = getSession('MEMBER')
   if (!session) return Promise.reject(new Error('Please log in to unregister from this event.'))
   if (!slug) return Promise.reject(new Error('This event is missing its registration link.'))
   const key = accountKey(session)
@@ -93,7 +93,7 @@ export const unregisterFromEvent = (slug) => {
 
   const cancellation = (async () => {
     try {
-      await memberAxiosInstance.delete(
+      await axiosInstance.delete(
         `/events/${encodeURIComponent(slug)}/register`,
         { _expectedAccessToken: session.accessToken },
       )

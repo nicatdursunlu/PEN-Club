@@ -2,10 +2,10 @@ export const AUTH_CHANGE_EVENT = 'pen-auth-change'
 export const AUTH_SESSION_KEY = 'pen_auth_session'
 export const notifyAuthChange = () => window.dispatchEvent(new Event(AUTH_CHANGE_EVENT))
 
-export const getSession = () => {
+export const getSession = (role) => {
   try {
     const session = JSON.parse(localStorage.getItem(AUTH_SESSION_KEY))
-    return typeof session?.accessToken === 'string' && session.accessToken && ['ADMIN', 'MEMBER'].includes(session.role) ? session : null
+    return typeof session?.accessToken === 'string' && session.accessToken && ['ADMIN', 'MEMBER'].includes(session.role) && (!role || session.role === role) ? session : null
   } catch { return null }
 }
 export const saveSession = (session) => {

@@ -12,8 +12,8 @@ All page routes are defined in [src/components/Router.jsx](src/components/Router
 | `/events/:id` | `EventDetail` | Details for an event |
 | `/gallery` | `Gallery` | Gallery page |
 | `/contact` | `Contact` | Contact page |
-| `/login` | `MemberAuth` | Member login |
-| `/register` | `MemberAuth` | Member registration |
+| `/login` | `Auth` | Shared login |
+| `/register` | `Auth` | Member registration |
 
 The `:id` parameter is an event slug, despite its name. For example, `/events/community-meetup` fetches the event with slug `community-meetup`.
 
@@ -31,7 +31,6 @@ Upcoming event cards and detail pages include member registration via `POST /eve
 
 | URL | Component | Access | Purpose |
 | --- | --- | --- | --- |
-| `/admin/login` | `AdminLogin` | Public | Admin sign-in |
 | `/admin` | `AdminPanel` | Authenticated | Admin dashboard |
 | `/admin/events` | `AdminEvents` | Authenticated | Manage events |
 | `/admin/users` | `AdminUsers` | Admin session required | View the users list |
@@ -43,14 +42,16 @@ The admin events list (`/admin/events`) shows a **View participants** link on ea
 
 For example, `/admin/events/community-meetup` edits the event with slug `community-meetup`. The static `/admin/events/new` route opens the creation page.
 
-Protected admin routes use [ProtectedRoute](src/components/admin/ProtectedRoute.jsx). Unauthenticated visitors are redirected to `/admin/login`, with the requested location stored in navigation state as `from`.
+Protected admin routes use [ProtectedRoute](src/components/admin/ProtectedRoute.jsx). Unauthenticated visitors are redirected to `/login`, with the requested location stored in navigation state as `from`.
 
 ## Layout and unmatched URLs
 
-Shared logout calls `POST /auth/logout` under `VITE_API_BASE_URL` (which includes `/api/v1`) with the stored bearer token and no body. Local credentials are cleared immediately, even if the logout API fails. Authenticated clients handle expired access tokens on HTTP 401 or 403 using `POST /auth/refresh-token` with `{ refreshToken }`, preserve rotated refresh tokens, and retry the original request once. Concurrent failures share one refresh per current access token; delayed failures reuse the refreshed token. Logout occurs only when refresh fails or the retried request returns another 401/403, redirecting to `/admin/login` for Admin or `/login` for Member. The first 403 attempts refresh rather than immediately logging out. Anonymous failures and responses from an older login do not log out the current user. In-flight refreshes cannot restore a logged-out session or replay under a different login.
+Shared logout calls `POST /auth/logout` under `VITE_API_BASE_URL` (which includes `/api/v1`) with the stored bearer token and no body. Local credentials are cleared immediately, even if the logout API fails. Authenticated clients handle expired access tokens on HTTP 401 or 403 using `POST /auth/refresh-token` with `{ refreshToken }`, preserve rotated refresh tokens, and retry the original request once. Concurrent failures share one refresh per current access token; delayed failures reuse the refreshed token. Logout occurs only when refresh fails or the retried request returns another 401/403, redirecting to `/login` for both roles. The first 403 attempts refresh rather than immediately logging out. Anonymous failures and responses from an older login do not log out the current user. In-flight refreshes cannot restore a logged-out session or replay under a different login.
 
 The Users link in the admin dashboard and event pages opens `/admin/users`. The page calls `GET /users` through the admin API client, expects an array of user profiles, and shows first name, last name, email, gender, phone number, and education degree. It includes user totals, refresh, loading, empty, retry, and forbidden states. Access uses the existing protected admin route and Admin role; the backend enforces the admin role.
 
 [App.jsx](src/App.jsx) provides `BrowserRouter` and the shared layout. URLs beginning with `/admin` hide the public navbar and footer.
 
 No catch-all or 404 route is currently defined. Unmatched URLs render no route content inside the shared layout.
+
+Both admins and members sign in at `/login` using `POST /auth/login`. The role returned by the backend (or carried in the access token) selects `/admin` for admins and `/profile` for members. Members returning from an event detail page return to that event.

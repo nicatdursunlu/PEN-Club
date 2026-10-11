@@ -16,7 +16,7 @@ const AdminCreateEvent = () => {
 
   const handleLogout = () => {
     logout()
-    navigate('/admin/login')
+    navigate('/login')
   }
 
   const handleSubmit = async (formValues) => {
@@ -35,7 +35,7 @@ const AdminCreateEvent = () => {
 
     setLoading(true)
     try {
-      const event = await createEvent(buildPayload({ ...formValues, status: 'DRAFT' }))
+      const event = await createEvent({ ...buildPayload(formValues), status: 'DRAFT' })
       showToast('success', 'Event saved as a draft. Publish it from the event editor when ready.')
       const eventSlug = event?.slug || formValues.slug.trim()
       setTimeout(() => navigate(eventSlug ? `/admin/events/${encodeURIComponent(eventSlug)}` : '/admin/events'), 1200)
@@ -113,7 +113,6 @@ const AdminCreateEvent = () => {
           initialValues={EMPTY_FORM}
           onSubmit={handleSubmit}
           loading={loading}
-          statusReadOnly
           submitLabel="Create Draft"
         />
       </main>

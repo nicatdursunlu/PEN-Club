@@ -1,10 +1,10 @@
-import memberAxiosInstance from './memberAxiosInstance'
-import { getMemberSession, updateMemberSessionProfile } from './memberAuthService'
+import axiosInstance from './axiosInstance'
+import { getSession, updateSessionProfile } from './authService'
 
 const request = async (config) => {
-  const session = getMemberSession()
+  const session = getSession('MEMBER')
   if (!session) throw new Error('Please log in to continue.')
-  return memberAxiosInstance({ ...config, _expectedAccessToken: session.accessToken })
+  return axiosInstance({ ...config, _expectedAccessToken: session.accessToken })
 }
 
 export const getMemberProfile = async () => {
@@ -19,6 +19,6 @@ export const updateMemberProfile = async (profile) => {
     data: profile,
   })
   // Also supports successful updates with an empty (204) response body.
-  updateMemberSessionProfile(profile, response.config._authToken)
+  updateSessionProfile(profile, response.config._authToken)
   return profile
 }

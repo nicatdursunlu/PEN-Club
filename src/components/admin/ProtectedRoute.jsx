@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { isAdmin } from '../../services/authService'
+import { isAdmin, getSession } from '../../services/authService'
 import { AUTH_CHANGE_EVENT } from '../../services/authStorage'
 
 const ProtectedRoute = ({ children }) => {
@@ -17,7 +17,7 @@ const ProtectedRoute = ({ children }) => {
   }, [])
 
   if (!authenticated) {
-    return <Navigate to="/admin/login" state={{ from: location }} replace />
+    return <Navigate to={getSession() ? '/profile' : '/login'} state={{ from: location }} replace />
   }
 
   return children

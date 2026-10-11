@@ -6,7 +6,6 @@ export const getAccessToken = () => getSession()?.accessToken || null
 export const getRefreshToken = () => getSession()?.refreshToken || null
 export const isAuthenticated = () => Boolean(getSession())
 export const isAdmin = () => getSession()?.role === 'ADMIN'
-export const getAdminSession = () => isAdmin() ? getSession() : null
 export const clearTokens = clearSession
 
 const normalizeRole = (value) => {

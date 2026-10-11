@@ -158,12 +158,13 @@ test('one shared session stores server role; switching roles replaces credential
   await auth.login('admin@example.com', 'password123')
   assert.equal(auth.isAdmin(), true)
   assert.equal(auth.getSession().role, 'ADMIN')
+  assert.equal(auth.getSession('MEMBER'), null)
   assert.deepEqual([...storage.keys()], ['pen_auth_session'])
   axios.defaults.adapter = async (config) => ({ data: { accessToken: 'member-token', refreshToken: 'member-refresh', user: { role: 'MEMBER', firstName: 'Jane' } }, status: 200, config })
   await auth.login('member@example.com', 'password123')
   assert.equal(auth.isAdmin(), false)
   assert.equal(auth.isAuthenticated(), true)
-  assert.equal(auth.getAdminSession(), null)
+  assert.equal(auth.getSession('ADMIN'), null)
   assert.equal(auth.getSession().role, 'MEMBER')
   assert.deepEqual([...storage.keys()], ['pen_auth_session'])
   axios.defaults.adapter = async () => { throw new Error('Invalid credentials') }
@@ -189,6 +190,7 @@ test('shared refresh rotates tokens and preserves role, email, and profile', asy
   }
   await auth.refreshAccessToken()
   assert.equal(auth.getSession().role, 'ADMIN')
+  assert.equal(auth.getSession('MEMBER'), null)
   assert.equal(auth.getAccessToken(), 'new')
   assert.equal(auth.getRefreshToken(), 'refresh-new')
   assert.equal(auth.getSession().profile.firstName, 'Jane')

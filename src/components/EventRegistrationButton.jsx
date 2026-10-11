@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getMemberSession, MEMBER_AUTH_EVENT } from '../services/memberAuthService'
+import { getSession } from '../services/authService'
+import { AUTH_CHANGE_EVENT } from '../services/authStorage'
 import { EVENT_REGISTRATION_CHANGE, isEventRegistered, registerForEvent, unregisterFromEvent } from '../services/eventRegistrationService'
+import { canRegisterForEvent } from '../utils/eventLifecycle'
 
-export default function EventRegistrationButton({ slug, children, className = 'mt-3' }) {
+export default function EventRegistrationButton({ slug, event, children, className = 'mt-3' }) {
   const navigate = useNavigate()
-  const [session, setSession] = useState(getMemberSession)
+  const [session, setSession] = useState(() => getSession('MEMBER'))
   const [registered, setRegistered] = useState(() => isEventRegistered(slug))
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -14,23 +16,23 @@ export default function EventRegistrationButton({ slug, children, className = 'm
 
   useEffect(() => {
     const update = () => setRegistered(isEventRegistered(slug))
-    const authChanged = () => { setSession(getMemberSession()); update(); setError(''); setSuccess('') }
+    const authChanged = () => { setSession(getSession('MEMBER')); update(); setError(''); setSuccess('') }
     update()
     window.addEventListener(EVENT_REGISTRATION_CHANGE, update)
-    window.addEventListener(MEMBER_AUTH_EVENT, authChanged)
+    window.addEventListener(AUTH_CHANGE_EVENT, authChanged)
     window.addEventListener('storage', authChanged)
     return () => {
       window.removeEventListener(EVENT_REGISTRATION_CHANGE, update)
-      window.removeEventListener(MEMBER_AUTH_EVENT, authChanged)
+      window.removeEventListener(AUTH_CHANGE_EVENT, authChanged)
       window.removeEventListener('storage', authChanged)
     }
   }, [slug])
 
   const updateRegistration = async () => {
-    if (submitting.current) return
+    if (submitting.current || !canRegisterForEvent(event)) return
     const unregister = isEventRegistered(slug)
     const from = { pathname: `/events/${encodeURIComponent(slug)}` }
-    if (!getMemberSession()) {
+    if (!getSession('MEMBER')) {
       setSession(null)
       return
     }
@@ -42,7 +44,7 @@ export default function EventRegistrationButton({ slug, children, className = 'm
       if (unregister) await unregisterFromEvent(slug)
       else await registerForEvent(slug)
       setRegistered(isEventRegistered(slug))
-      if (unregister && getMemberSession()) setSuccess('You’ve unregistered from this event.')
+      if (unregister && getSession('MEMBER')) setSuccess('You’ve unregistered from this event.')
     } catch (err) {
       if (err.response?.status === 401) {
         navigate('/login', { state: { from } })
@@ -56,7 +58,7 @@ export default function EventRegistrationButton({ slug, children, className = 'm
     }
   }
 
-  if (!session) return null
+  if (!session || !canRegisterForEvent(event)) return null
 
   return (
     <div className={className}>

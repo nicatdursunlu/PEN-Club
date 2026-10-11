@@ -84,7 +84,7 @@ const Navbar = () => {
                 <button type="button" onClick={() => {
                   logout()
                   setIsOpen(false)
-                  navigate('/admin/login', { replace: true })
+                  navigate('/login', { replace: true })
                 }} className="px-4 py-2 rounded-lg bg-transparent text-white border border-white/40 hover:text-secondary focus-visible:ring-2 focus-visible:ring-secondary">Logout</button>
               </>
             ) : session ? (
