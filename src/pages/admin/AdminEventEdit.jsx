@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchEventBySlug, updateEvent } from '../../services/eventsService'
+import { fetchEventBySlug, updateEvent, publishEvent, cancelEvent } from '../../services/eventsService'
 import { logout } from '../../services/authService'
 import EventForm, { EMPTY_FORM, buildPayload, eventToForm } from '../../components/admin/EventForm'
 
@@ -12,6 +12,8 @@ const AdminEventEdit = () => {
   const [loadingEvent, setLoadingEvent] = useState(true)
   const [loadError, setLoadError] = useState(null)
   const [saving, setSaving] = useState(false)
+  const [statusAction, setStatusAction] = useState(null)
+  const [eventStatus, setEventStatus] = useState(null)
   const [toast, setToast] = useState(null)
 
   const showToast = (type, message) => {
@@ -26,6 +28,7 @@ const AdminEventEdit = () => {
       setLoadError(null)
       try {
         const data = await fetchEventBySlug(slug)
+        setEventStatus(data.status?.toUpperCase() || null)
         setInitialValues(eventToForm(data))
       } catch (err) {
         setLoadError(err.message || 'Failed to load event.')
@@ -42,6 +45,7 @@ const AdminEventEdit = () => {
   }
 
   const handleSubmit = async (formValues) => {
+    if (saving || statusAction) return
     if (!formValues.title.trim()) {
       showToast('error', 'Event title is required.')
       return
@@ -68,6 +72,21 @@ const AdminEventEdit = () => {
       showToast('error', message)
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleStatusChange = async (action) => {
+    if (saving || statusAction) return
+    setStatusAction(action)
+    try {
+      const data = await (action === 'publish' ? publishEvent(slug) : cancelEvent(slug))
+      const status = data?.status?.toUpperCase() || (action === 'publish' ? 'PUBLISHED' : 'CANCELLED')
+      setEventStatus(status)
+      showToast('success', action === 'publish' ? 'Event published successfully!' : 'Event cancelled successfully!')
+    } catch (err) {
+      showToast('error', err.response?.data?.message || err.response?.data?.error || err.message || `Failed to ${action} event. Please try again.`)
+    } finally {
+      setStatusAction(null)
     }
   }
 
@@ -177,10 +196,30 @@ const AdminEventEdit = () => {
                 Editing: <span className="font-mono text-gray-700">{slug}</span>
               </p>
             </div>
+            <div className="mb-6 p-5 bg-white rounded-xl shadow-sm flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="font-semibold text-gray-800">Event visibility</p>
+                <p className="text-sm text-gray-500" role="status">Status: {eventStatus || 'Unknown'}</p>
+                <p className="text-sm text-gray-500">Publishing makes this event public. Cancelling hides it from the public.</p>
+              </div>
+              <div className="flex gap-3">
+                <button type="button" onClick={() => handleStatusChange('publish')}
+                  disabled={saving || !!statusAction || eventStatus !== 'DRAFT'}
+                  className="px-4 py-2 bg-secondary text-white rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+                  {statusAction === 'publish' ? 'Publishing...' : 'Publish Event'}
+                </button>
+                <button type="button" onClick={() => handleStatusChange('cancel')}
+                  disabled={saving || !!statusAction || eventStatus === 'CANCELLED' || !eventStatus}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+                  {statusAction === 'cancel' ? 'Cancelling...' : 'Cancel Event'}
+                </button>
+              </div>
+            </div>
             <EventForm
               initialValues={initialValues}
               onSubmit={handleSubmit}
-              loading={saving}
+              eventStatus={eventStatus}
+              loading={saving || !!statusAction}
               submitLabel="Update Event"
             />
           </>

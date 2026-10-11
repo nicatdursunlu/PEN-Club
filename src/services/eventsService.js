@@ -1,6 +1,18 @@
 import axiosInstance from './axiosInstance'
 import { isAdmin } from './authService'
 
+export const publishEvent = async (slug) => {
+  if (!isAdmin()) throw new Error('Admin login is required to publish an event.')
+  const response = await axiosInstance.patch(`/events/${encodeURIComponent(slug)}/publish`)
+  return response.data
+}
+
+export const cancelEvent = async (slug) => {
+  if (!isAdmin()) throw new Error('Admin login is required to cancel an event.')
+  const response = await axiosInstance.patch(`/events/${encodeURIComponent(slug)}/cancel`)
+  return response.data
+}
+
 export const fetchEventParticipants = async (slug) => {
   if (!isAdmin()) throw new Error('Admin login is required to view participants.')
   const response = await axiosInstance.get(`/events/${encodeURIComponent(slug)}/participants`)

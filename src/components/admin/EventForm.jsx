@@ -20,7 +20,7 @@ export const EMPTY_FORM = {
   locationLink: '',
   mapEmbedUrl: '',
   category: '',
-  status: 'UPCOMING',
+  status: 'DRAFT',
   organizer: '',
   attendees: '',
   specialNote: '',
@@ -132,12 +132,16 @@ export const eventToForm = (event) => ({
 })
 
 // ─── Main EventForm Component ─────────────────────────────────────────────────
-const EventForm = ({ initialValues = EMPTY_FORM, onSubmit, loading = false, submitLabel = 'Create Event' }) => {
+const EventForm = ({ initialValues = EMPTY_FORM, onSubmit, loading = false, submitLabel = 'Create Event', eventStatus, statusReadOnly = false }) => {
   const [form, setForm] = useState(initialValues)
 
   useEffect(() => {
     setForm(initialValues)
   }, [initialValues])
+
+  useEffect(() => {
+    if (eventStatus) setForm((previous) => ({ ...previous, status: eventStatus }))
+  }, [eventStatus])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -216,9 +220,13 @@ const EventForm = ({ initialValues = EMPTY_FORM, onSubmit, loading = false, subm
                 id="status"
                 name="status"
                 value={form.status}
+                disabled={statusReadOnly || ['DRAFT', 'PUBLISHED', 'CANCELLED'].includes(eventStatus)}
                 onChange={handleChange}
                 className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-sm bg-white"
               >
+                {['DRAFT', 'PUBLISHED', 'CANCELLED'].includes(form.status) && (
+                  <option value={form.status}>{form.status.charAt(0) + form.status.slice(1).toLowerCase()}</option>
+                )}
                 <option value="UPCOMING">Upcoming</option>
                 <option value="COMPLETED">Completed</option>
               </select>
