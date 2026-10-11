@@ -16,6 +16,8 @@
 
 ## 📋 Pages
 
+See the [route reference](ROUTES.md) for all public and admin URLs, parameters, and access requirements.
+
 - **Home**: Welcome page with hero section, features, and call-to-action
 - **About**: Information about PEN Club's mission and activities
 - **Events**: Upcoming and past events showcase
@@ -53,6 +55,10 @@
 npm run dev
 ```
 The application will start on `http://localhost:3000` (or the next available port)
+
+Local API calls use `http://localhost:8080/api/v1`, configured in `.env.development`. Run the backend on port `8080` and allow requests from `http://localhost:3000` in its CORS configuration. Restart Vite after changing environment files.
+
+This development setting overrides the API URL in `.env` and `.env.local` when running `npm run dev`. Production builds continue to use the existing production environment configuration. For a personal development override, set `VITE_API_BASE_URL` in `.env.development.local`.
 
 ### Build for Production
 ```bash

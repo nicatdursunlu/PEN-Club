@@ -1,220 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { fetchEventBySlug } from '../services/eventsService'
+import EventRegistrationButton from '../components/EventRegistrationButton'
 
 const EventDetail = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  // Event data - in a real app, this would come from an API or database
-  const eventsData = {
-    'job-networking-meetup-feb-2026': {
-      title: 'Job Networking & Support Meetup',
-      date: 'February 15, 2026',
-      time: '12:00 PM - 2:00 PM',
-      location: 'Green Caffè Nero, Warsaw, Poland',
-      category: 'Networking',
-      status: 'completed',
-      attendees: 28,
-      description: '🚀 PEN Club is starting a new phase…',
-      fullDescription: `On Sunday, February 15th, 2026, PEN Club hosted a transformative networking meetup that brought together 28 members of the Azerbaijani community in Poland. This event marked a new phase in our club's mission - focusing on real, tangible support between those actively seeking employment opportunities in Poland and those who are currently established in their careers.
+  const [event, setEvent] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-The atmosphere was warm and collaborative as participants gathered to share experiences, exchange insights, and build meaningful professional relationships. The event created a safe space where job seekers could openly discuss their challenges while employed professionals offered guidance, mentorship, and practical advice based on their own journeys in the Polish job market.
-
-Throughout the two-hour session, attendees engaged in deep conversations about navigating the Polish employment landscape, understanding cultural nuances in the workplace, and leveraging professional networks effectively. The energy in the room was palpable as connections were made, LinkedIn profiles were reviewed on the spot, and CVs were critiqued with constructive feedback.`,
-      agenda: [
-        {
-          time: '12:00 PM - 12:15 PM',
-          title: 'Welcome & Introduction',
-          description: 'Opening remarks by PEN Club organizers, introduction to the event format, and ice-breaking session where each participant shared their current professional status and what they hoped to gain from the meetup.'
-        },
-        {
-          time: '12:15 PM - 12:45 PM',
-          title: 'Panel Discussion: Job Market Insights',
-          description: 'Employed professionals shared their experiences about finding jobs in Poland, discussing topics like application strategies, interview preparation, and workplace culture. Q&A session allowed job seekers to ask specific questions about different industries and career paths.'
-        },
-        {
-          time: '12:45 PM - 1:15 PM',
-          title: 'CV & LinkedIn Review Sessions',
-          description: 'Small group breakout sessions where participants paired up for one-on-one CV reviews and LinkedIn profile optimization. Experienced professionals provided personalized feedback on resumes, cover letters, and online professional presence.'
-        },
-        {
-          time: '1:15 PM - 1:45 PM',
-          title: 'Networking & Relationship Building',
-          description: 'Open networking time with refreshments. Participants exchanged contact information, discussed potential job opportunities, and formed mentorship connections. Several attendees discovered mutual professional interests and planned follow-up meetings.'
-        },
-        {
-          time: '1:45 PM - 2:00 PM',
-          title: 'Closing & Next Steps',
-          description: 'Wrap-up session where participants shared key takeaways, success stories from the day, and commitments to support each other going forward. Announcement of future PEN Club networking events and initiatives.'
-        }
-      ],
-      eventHighlights: [
-        'Over 15 CV reviews conducted with personalized feedback',
-        'Multiple LinkedIn connections made between job seekers and employers',
-        '3 potential job leads identified during networking sessions',
-        'Formation of 5 ongoing mentorship pairs',
-        'Shared resources including job boards, recruitment agencies, and professional groups',
-        'Commitment from attendees to continue supporting each other beyond the event'
-      ],
-      highlights: [
-        'Real-life experiences about finding a job in Poland',
-        'Communication and networking opportunities',
-        'Exchange of ideas regarding CV / LinkedIn improvement',
-        'New connections and strong relationships',
-        'Opportunity to expand your network and support others'
-      ],
-      goal: "PEN Club's goal is simple: To move forward together, not alone.",
-      images: [
-        {
-          url: '/images/events/job-networking-feb-2026.jpeg',
-          alt: 'Job Networking & Support Meetup - Group photo of attendees',
-          caption: 'Our amazing community coming together for networking and support'
-        }
-      ],
-      organizer: 'PEN Club Team',
-      locationLink: 'https://maps.app.goo.gl/trXVGZfHtWRW1PmU9',
-      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2444.8582558091102!2d21.0217404!3d52.209623300000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471eccdefa5c150b%3A0x2cd5168208e55a86!2sGreen%20Caff%C3%A8%20Nero!5e0!3m2!1sen!2spl!4v1771243121410!5m2!1sen!2spl'
-    },
-    'football-tournament-march-2026': {
-      title: 'Football Tournament',
-      date: 'March 15, 2026',
-      time: '3:00 PM - 6:00 PM',
-      location: 'City Sports Complex',
-      category: 'Sports',
-      status: 'upcoming',
-      description: 'Join us for an exciting football tournament! Form teams and compete for the championship trophy.',
-      fullDescription: 'Get ready for an action-packed afternoon of football! This tournament brings together the Azerbaijani community in Poland for friendly competition and team building.',
-      highlights: [
-        'Team-based competition format',
-        'Championship trophy for winners',
-        'Refreshments provided',
-        'All skill levels welcome',
-        'Great opportunity to meet new people'
-      ],
-      goal: 'Building community through sports and healthy competition.',
-      images: [],
-      organizer: 'PEN Club Sports Committee'
-    },
-    'mafia-night-march-2026': {
-      title: 'Mafia Night',
-      date: 'March 22, 2026',
-      time: '7:00 PM - 11:00 PM',
-      location: 'Community Center',
-      category: 'Games',
-      status: 'upcoming',
-      description: 'Strategic Mafia game night with multiple rounds. Test your detective skills and social deduction!',
-      fullDescription: 'Join us for an evening of mystery, strategy, and fun! Our Mafia night features multiple rounds of the classic social deduction game.',
-      highlights: [
-        'Multiple game rounds',
-        'Experienced moderators',
-        'Snacks and drinks provided',
-        'Prizes for best players',
-        'Perfect for making new friends'
-      ],
-      goal: 'Entertainment and social bonding through strategic gameplay.',
-      images: [],
-      organizer: 'PEN Club Games Team'
-    },
-    'summer-picnic-aug-2025': {
-      title: 'Summer Picnic & Games Festival',
-      date: 'August 16, 2025',
-      time: '12:00 PM - 6:00 PM',
-      location: 'Outdoor Park, Warsaw',
-      category: 'Social',
-      status: 'completed',
-      attendees: 65,
-      description: '🌿 Epic outdoor picnic with volleyball, mafia, intellectual games, board games, music, pizza, and samovar tea!',
-      fullDescription: `On August 16th, 2025, PEN Club organized one of the most memorable events of the summer - a grand picnic and games festival that brought together 65 members of our vibrant community. This wasn't just another outdoor gathering; it was a celebration of friendship, culture, and the joy of spending quality time together in nature.
-
-The event offered two participation packages to accommodate everyone's preferences. The Full Package (40 AZN) included delicious pizza along with all activities, while the Basic Package (20 AZN) allowed participants to bring their own food and enjoy all the games and entertainment. This flexible approach ensured that everyone could join regardless of their budget or dietary preferences.
-
-From noon until evening, the park was filled with laughter, competitive spirit, and the warmth of community bonding. Multiple activity stations were set up across the venue - volleyball nets for sports enthusiasts, cozy spots for board games, areas for intellectual competitions with exciting prizes, and of course, the legendary Mafia game sessions that kept everyone on their toes. The highlight for many was the traditional Azerbaijani samovar tea service, which added a special cultural touch to the gathering and reminded everyone of home. Music played throughout the day, creating the perfect atmosphere for both energetic activities and relaxed conversations. The combination of sports, strategy games, intellectual challenges, delicious food, and refreshing drinks made this event truly unforgettable.`,
-      eventHighlights: [
-        '65 participants enjoying a full day of activities',
-        'Perfect summer weather for outdoor celebration',
-        'Multiple volleyball matches with rotating teams',
-        'Intense Mafia game sessions with experienced moderators',
-        'Intellectual quiz competitions with prizes for winners',
-        'Variety of board games for all ages and interests',
-        'Live music creating festive atmosphere',
-        'Traditional Azerbaijani samovar tea service',
-        'Pizza feast and cold refreshing drinks',
-        'Successful blend of sports, games, and cultural elements'
-      ],
-      highlights: [
-        'Volleyball matches for sports enthusiasts 🏐',
-        'Strategic Mafia games testing social deduction skills 🕵️‍♂️',
-        'Intellectual competitions with exciting prizes 🧠',
-        'Board games for relaxed entertainment 🎲',
-        'Live music and dancing 🎵',
-        'Delicious pizza and snacks 🍕',
-        'Cold refreshing drinks 🍹',
-        'Traditional samovar tea experience ☕',
-        'Two package options (Full & Basic) for flexibility',
-        'All-day entertainment from noon to evening'
-      ],
-      goal: "Creating an unforgettable summer experience that combines sports, intellectual activities, cultural traditions, and community bonding in a beautiful outdoor setting.",
-      images: [],
-      organizer: 'PEN Club Events Team',
-      locationLink: 'https://maps.app.goo.gl/Gcipa9CUG4X9tMN98',
-      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2005.315747698821!2d20.999647943340328!3d52.214345269053595!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecd005716fdf3%3A0xf12423803d05bdd7!2sLe%C5%BCaki%20kamienne%20na%20Polu%20Mokotowskim!5e0!3m2!1sen!2spl!4v1771243596555!5m2!1sen!2spl',
-      pricing: {
-        full: '40 AZN (includes pizza)',
-        basic: '20 AZN (bring your own food)'
-      },
-      specialNote: '🌟 This event featured two package options: Full Package (40 AZN) with pizza included, and Basic Package (20 AZN) where participants brought their own food. Both packages included access to all activities, games, music, drinks, and the traditional samovar tea!'
-    },
-    'outdoor-volleyball-sept-2025': {
-      title: 'Outdoor Volleyball - Last Summer Games',
-      date: 'September 12, 2025',
-      time: '5:00 PM - 7:00 PM',
-      location: 'Volleyball Court, Warsaw',
-      category: 'Sports',
-      status: 'completed',
-      attendees: 32,
-      description: '🏐 Final outdoor volleyball session before winter!',
-      fullDescription: `On September 12th, 2025, PEN Club organized what would be the last outdoor volleyball session of the summer season. With 32 enthusiastic participants, this event marked a bittersweet moment as we prepared to transition from free outdoor games to indoor facilities for the colder months ahead.
-
-The weather was perfect for volleyball - warm but not too hot, with a gentle breeze that made the game even more enjoyable. Players of all skill levels came together, forming balanced teams and engaging in friendly but competitive matches. The atmosphere was filled with laughter, cheers, and the satisfying sound of the volleyball being spiked and served across the net.
-
-As the sun began to set, there was a collective appreciation for these outdoor sessions that had brought the community together throughout the summer. The event served as a reminder to make the most of the remaining warm days, as future games would require indoor venue bookings and associated costs.`,
-      eventHighlights: [
-        '32 active participants enjoying the last outdoor session',
-        'Perfect weather conditions for volleyball',
-        '6 competitive matches played throughout the event',
-        'Mix of experienced players and beginners playing together',
-        'Community bonding before transitioning to indoor games',
-        'Important announcement about winter indoor sessions',
-        'Group photo capturing the memorable moment'
-      ],
-      highlights: [
-        'Last chance to play outdoors before winter',
-        'Free participation (no venue costs)',
-        'All skill levels welcome',
-        'Great weather and atmosphere',
-        'Community building through sports',
-        'Information about upcoming indoor sessions'
-      ],
-      goal: "Making the most of summer weather while building community through sports before transitioning to indoor facilities.",
-      images: [],
-      organizer: 'PEN Club Sports Committee',
-      locationLink: 'https://maps.app.goo.gl/Rj57CGbqSG3mzAL89',
-      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2444.5506430935175!2d20.9962002!3d52.215213!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471eccc08052518d%3A0x88e686ef3b99e439!2sVolleyball%20Court!5e0!3m2!1sen!2spl!4v1771243149775!5m2!1sen!2spl',
-      specialNote: '⚠️ Important: Summer is almost over! Once the weather gets colder, games will be organized indoors (paid). Don\'t miss this opportunity for free outdoor volleyball!'
+  useEffect(() => {
+    const loadEvent = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const data = await fetchEventBySlug(id)
+        setEvent(data)
+      } catch (err) {
+        setError(err.message || 'Failed to load event details.')
+      } finally {
+        setLoading(false)
+      }
     }
+
+    loadEvent()
+  }, [id])
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4">
+        <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-gray-500 text-lg">Loading event details...</p>
+      </div>
+    )
   }
 
-  const event = eventsData[id]
-
-  if (!event) {
+  // Error / Not found state
+  if (error || !event) {
     return (
       <div className="min-h-screen bg-gray-50 py-20">
         <div className="max-w-7xl mx-auto px-5">
           <div className="text-center py-20">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">Event Not Found</h1>
-            <p className="text-lg text-gray-600 mb-8">Sorry, we couldn't find the event you're looking for.</p>
-            <button 
-              onClick={() => navigate('/events')} 
+            <p className="text-lg text-gray-600 mb-8">
+              {error || "Sorry, we couldn't find the event you're looking for."}
+            </p>
+            <button
+              onClick={() => navigate('/events')}
               className="px-8 py-3 bg-secondary text-white rounded-lg font-semibold hover:bg-opacity-90 transition-all"
             >
               Back to Events
@@ -229,38 +64,48 @@ As the sun began to set, there was a collective appreciation for these outdoor s
     <div className="event-detail-page bg-gray-50">
       <section className="bg-gradient-to-r from-primary to-bg-dark py-16 text-white">
         <div className="max-w-7xl mx-auto px-5">
-          <button 
-            onClick={() => navigate('/events')} 
+          <button
+            onClick={() => navigate('/events')}
             className="mb-6 flex items-center gap-2 text-white hover:text-secondary transition-colors font-semibold"
           >
             ← Back to Events
           </button>
           <div className="flex flex-wrap gap-3 mb-4">
-            <span className={`px-4 py-2 rounded-full font-semibold ${
-              event.status === 'completed' 
-                ? 'bg-green-500 text-white' 
-                : 'bg-blue-500 text-white'
-            }`}>
-              {event.status === 'completed' ? '✓ Completed' : '📅 Upcoming'}
-            </span>
-            <span className="px-4 py-2 bg-secondary text-white rounded-full font-semibold">
-              {event.category}
-            </span>
+            {event.status && (
+              <span className={`px-4 py-2 rounded-full font-semibold ${
+                event.status.toUpperCase() === 'COMPLETED'
+                  ? 'bg-green-500 text-white'
+                  : 'bg-blue-500 text-white'
+              }`}>
+                {event.status.toUpperCase() === 'COMPLETED' ? '✓ Completed' : '📅 Upcoming'}
+              </span>
+            )}
+            {event.category && (
+              <span className="px-4 py-2 bg-secondary text-white rounded-full font-semibold">
+                {event.category}
+              </span>
+            )}
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">{event.title}</h1>
           <div className="flex flex-wrap gap-6 text-lg">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">📅</span>
-              <span>{event.date}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🕐</span>
-              <span>{event.time}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">📍</span>
-              <span>{event.location}</span>
-            </div>
+            {event.date && (
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">📅</span>
+                <span>{event.date}</span>
+              </div>
+            )}
+            {event.time && (
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🕐</span>
+                <span>{event.time}</span>
+              </div>
+            )}
+            {event.location && (
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">📍</span>
+                <span>{event.location}</span>
+              </div>
+            )}
             {event.attendees && (
               <div className="flex items-center gap-2">
                 <span className="text-2xl">👥</span>
@@ -275,14 +120,16 @@ As the sun began to set, there was a collective appreciation for these outdoor s
         <div className="max-w-7xl mx-auto px-5">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
+
+              {/* Event Photos */}
               {event.images && event.images.length > 0 && (
                 <div className="bg-white rounded-xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">Event Photos</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {event.images.map((image, index) => (
                       <div key={index} className="rounded-lg overflow-hidden shadow-md">
-                        <img 
-                          src={image.url} 
+                        <img
+                          src={image.url}
                           alt={image.alt}
                           className="w-full h-64 object-cover"
                         />
@@ -295,11 +142,17 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                 </div>
               )}
 
-              <div className="bg-white rounded-xl shadow-lg p-8">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">About This Event</h2>
-                <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-line">{event.fullDescription}</p>
-              </div>
+              {/* About This Event */}
+              {(event.fullDescription || event.description) && (
+                <div className="bg-white rounded-xl shadow-lg p-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-6">About This Event</h2>
+                  <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+                    {event.fullDescription || event.description}
+                  </p>
+                </div>
+              )}
 
+              {/* Event Agenda */}
               {event.agenda && event.agenda.length > 0 && (
                 <div className="bg-white rounded-xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">Event Agenda</h2>
@@ -317,6 +170,7 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                 </div>
               )}
 
+              {/* Event Highlights */}
               {event.eventHighlights && event.eventHighlights.length > 0 && (
                 <div className="bg-white rounded-xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">Event Highlights</h2>
@@ -331,6 +185,7 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                 </div>
               )}
 
+              {/* What Participants Gained */}
               {event.highlights && event.highlights.length > 0 && (
                 <div className="bg-white rounded-xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">What Participants Gained</h2>
@@ -345,6 +200,7 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                 </div>
               )}
 
+              {/* Our Goal */}
               {event.goal && (
                 <div className="bg-gradient-to-br from-secondary to-accent text-white rounded-xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold mb-4">Our Goal</h2>
@@ -352,6 +208,7 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                 </div>
               )}
 
+              {/* Pricing */}
               {event.pricing && (
                 <div className="bg-white rounded-xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">Pricing Options</h2>
@@ -370,6 +227,7 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                 </div>
               )}
 
+              {/* Map */}
               {event.mapEmbedUrl && (
                 <div className="bg-white rounded-xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">Event Location</h2>
@@ -385,40 +243,49 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                       title="Event Location Map"
                       className="rounded-lg"
                     ></iframe>
-                    <a 
-                      href={event.locationLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-block px-6 py-3 bg-white border-2 border-secondary text-secondary rounded-lg font-semibold hover:bg-secondary hover:text-white transition-all"
-                    >
-                      📍 Open in Google Maps
-                    </a>
+                    {event.locationLink && (
+                      <a
+                        href={event.locationLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block px-6 py-3 bg-white border-2 border-secondary text-secondary rounded-lg font-semibold hover:bg-secondary hover:text-white transition-all"
+                      >
+                        📍 Open in Google Maps
+                      </a>
+                    )}
                   </div>
                 </div>
               )}
             </div>
 
+            {/* Sidebar */}
             <div className="lg:col-span-1 space-y-6">
               <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
                 <h3 className="text-2xl font-bold text-gray-800 mb-6">Event Details</h3>
                 <div className="space-y-4">
-                  <div className="flex flex-col gap-1">
-                    <strong className="text-gray-700 font-semibold">Date:</strong>
-                    <span className="text-gray-600">{event.date}</span>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <strong className="text-gray-700 font-semibold">Time:</strong>
-                    <span className="text-gray-600">{event.time}</span>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <strong className="text-gray-700 font-semibold">Location:</strong>
-                    <span className="text-gray-600">{event.location}</span>
-                  </div>
+                  {event.date && (
+                    <div className="flex flex-col gap-1">
+                      <strong className="text-gray-700 font-semibold">Date:</strong>
+                      <span className="text-gray-600">{event.date}</span>
+                    </div>
+                  )}
+                  {event.time && (
+                    <div className="flex flex-col gap-1">
+                      <strong className="text-gray-700 font-semibold">Time:</strong>
+                      <span className="text-gray-600">{event.time}</span>
+                    </div>
+                  )}
+                  {event.location && (
+                    <div className="flex flex-col gap-1">
+                      <strong className="text-gray-700 font-semibold">Location:</strong>
+                      <span className="text-gray-600">{event.location}</span>
+                    </div>
+                  )}
                   {event.locationLink && (
                     <div className="pt-2">
-                      <a 
-                        href={event.locationLink} 
-                        target="_blank" 
+                      <a
+                        href={event.locationLink}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-secondary hover:text-accent font-semibold transition-colors"
                       >
@@ -426,10 +293,12 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                       </a>
                     </div>
                   )}
-                  <div className="flex flex-col gap-1">
-                    <strong className="text-gray-700 font-semibold">Category:</strong>
-                    <span className="text-gray-600">{event.category}</span>
-                  </div>
+                  {event.category && (
+                    <div className="flex flex-col gap-1">
+                      <strong className="text-gray-700 font-semibold">Category:</strong>
+                      <span className="text-gray-600">{event.category}</span>
+                    </div>
+                  )}
                   {event.organizer && (
                     <div className="flex flex-col gap-1">
                       <strong className="text-gray-700 font-semibold">Organizer:</strong>
@@ -439,6 +308,7 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                 </div>
               </div>
 
+              {/* Special Note */}
               {event.specialNote && (
                 <div className="bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-400 rounded-xl shadow-lg p-6">
                   <div className="text-gray-800 leading-relaxed">
@@ -447,30 +317,47 @@ As the sun began to set, there was a collective appreciation for these outdoor s
                 </div>
               )}
 
-              {event.status === 'upcoming' && (
-                <div className="bg-gradient-to-br from-secondary to-accent text-white rounded-xl shadow-lg p-6">
-                  <h3 className="text-2xl font-bold mb-3">Interested?</h3>
-                  <p className="mb-4">Contact us to register for this event</p>
-                  <button 
-                    onClick={() => navigate('/contact')} 
-                    className="w-full px-6 py-3 bg-white text-secondary rounded-lg font-bold hover:bg-gray-100 transition-all"
-                  >
-                    Contact Us
-                  </button>
-                </div>
+              {/* Register CTA for upcoming events */}
+              {event.status && event.status.toUpperCase() === 'UPCOMING' && (
+                <EventRegistrationButton key={id} slug={event.slug || id} className="bg-white rounded-xl shadow-lg p-6">
+                  <h3 className="text-2xl font-bold mb-3">Join this event</h3>
+                  <p className="text-gray-600 mb-4">Register with your PEN Club member account.</p>
+                </EventRegistrationButton>
               )}
 
+              {/* Share */}
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Share Event</h3>
                 <div className="flex flex-col gap-3">
-                  <button className="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold" aria-label="Share on Facebook">
-                    📘 Facebook
+                  <button
+                    className="flex items-center gap-3 px-4 py-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#166FE5] transition-colors font-semibold"
+                    aria-label="Share on Facebook"
+                    onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')}
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 flex-shrink-0">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    Facebook
                   </button>
-                  <button className="flex items-center gap-3 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold" aria-label="Share on WhatsApp">
-                    💬 WhatsApp
+                  <button
+                    className="flex items-center gap-3 px-4 py-3 bg-[#25D366] text-white rounded-lg hover:bg-[#20BD5C] transition-colors font-semibold"
+                    aria-label="Share on WhatsApp"
+                    onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(window.location.href)}`, '_blank')}
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 flex-shrink-0">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    WhatsApp
                   </button>
-                  <button className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 transition-opacity font-semibold" aria-label="Share on Instagram">
-                    📷 Instagram
+                  <button
+                    className="flex items-center gap-3 px-4 py-3 bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
+                    aria-label="Share on Instagram"
+                    onClick={() => window.open('https://www.instagram.com/', '_blank')}
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 flex-shrink-0">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                    </svg>
+                    Instagram
                   </button>
                 </div>
               </div>
@@ -483,8 +370,8 @@ As the sun began to set, there was a collective appreciation for these outdoor s
         <div className="max-w-7xl mx-auto px-5 text-center">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">More Events</h2>
           <p className="text-lg text-gray-600 mb-8">Check out other events from PEN Club</p>
-          <button 
-            onClick={() => navigate('/events')} 
+          <button
+            onClick={() => navigate('/events')}
             className="px-8 py-3 bg-white border-2 border-secondary text-secondary rounded-lg font-semibold hover:bg-secondary hover:text-white transition-all"
           >
             View All Events

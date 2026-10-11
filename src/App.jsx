@@ -1,33 +1,32 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import Home from './pages/Home'
-import About from './pages/About'
-import Events from './pages/Events'
-import EventDetail from './pages/EventDetail'
-import Gallery from './pages/Gallery'
-import Contact from './pages/Contact'
+import Router from './components/Router'
 import './App.css'
+
+const ADMIN_PATHS = ['/admin']
+
+const AppLayout = () => {
+  const location = useLocation()
+  const isAdminRoute = ADMIN_PATHS.some((path) => location.pathname.startsWith(path))
+
+  return (
+    <div className="App">
+      {!isAdminRoute && <Navbar />}
+      <main className={isAdminRoute ? '' : 'main-content'}>
+        <Router />
+      </main>
+      {!isAdminRoute && <Footer />}
+    </div>
+  )
+}
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Navbar />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/events/:id" element={<EventDetail />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <BrowserRouter>
+      <AppLayout />
+    </BrowserRouter>
   )
 }
 
