@@ -172,3 +172,11 @@ For questions or suggestions, please contact us through the website's contact fo
 **Made with ❤️ by PEN Club Team**
 
 *Play • Enjoy • Network*
+
+## Tests
+
+Run `npm test` for both the service tests and React component tests. Run `npm run test:components` for the component suite alone, or `npm run test:watch` while editing.
+
+Component tests use Vitest, jsdom, and React Testing Library. They cover every shared component and page, including role-based routes, password visibility, form submissions, event publishing/cancellation/cloning, server pagination and filters, profile updates, and API-backed registration state. API services are mocked so tests run without a backend or real accounts. The Node service tests separately check request contracts and token refresh behavior.
+
+Each component and page has a separate `tests/components/<Component>.test.jsx` file. Shared mocks live in `setup.js`; router helpers and fixtures live in `helpers.jsx`. Run one component with `npm run test:components -- tests/components/Auth.test.jsx`.
