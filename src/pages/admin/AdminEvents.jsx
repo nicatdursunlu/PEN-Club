@@ -1,47 +1,68 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { fetchUpcomingEvents, fetchPastEvents } from '../../services/eventsService'
+import { fetchAllEvents } from '../../services/eventsService'
 import { logout } from '../../services/authService'
 import { formatDate } from '../../utils/dateUtils'
+
+const STATUS_BADGES = {
+  DRAFT: { label: 'Draft', color: 'bg-yellow-100 text-yellow-800' },
+  PUBLISHED: { label: 'Published', color: 'bg-blue-100 text-blue-700' },
+  CANCELLED: { label: 'Cancelled', color: 'bg-red-100 text-red-700' },
+  COMPLETED: { label: 'Completed', color: 'bg-green-100 text-green-700' },
+}
 
 const AdminEvents = () => {
   const navigate = useNavigate()
 
-  const [upcomingEvents, setUpcomingEvents] = useState([])
-  const [pastEvents, setPastEvents] = useState([])
+  const [allEvents, setAllEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [category, setCategory] = useState('')
+  const [status, setStatus] = useState('')
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [totalElements, setTotalElements] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
+  const requestId = useRef(0)
+
+  const categories = ['PLAY', 'ENJOY', 'NETWORK']
+  const currentPage = page
+  const firstIndex = (currentPage - 1) * pageSize
+
+  const clearFilters = () => {
+    setCategory('')
+    setStatus('')
+    setPage(1)
+  }
 
   const loadEvents = async () => {
+    const currentRequest = ++requestId.current
     setLoading(true)
     setError(null)
     try {
-      const [upcoming, past] = await Promise.all([
-        fetchUpcomingEvents(),
-        fetchPastEvents(),
-      ])
-      setUpcomingEvents(upcoming)
-      setPastEvents(past)
+      const data = await fetchAllEvents({ page: page - 1, size: pageSize, category, status })
+      if (currentRequest !== requestId.current) return
+      setAllEvents(data.content)
+      setTotalElements(data.totalElements)
+      setTotalPages(Math.max(1, data.totalPages))
+      if (page > Math.max(1, data.totalPages)) setPage(Math.max(1, data.totalPages))
     } catch (err) {
+      if (currentRequest !== requestId.current) return
       setError(err.message || 'Failed to load events.')
     } finally {
-      setLoading(false)
+      if (currentRequest === requestId.current) setLoading(false)
     }
   }
 
   useEffect(() => {
     loadEvents()
-  }, [])
+    return () => { requestId.current++ }
+  }, [page, pageSize, category, status])
 
   const handleLogout = () => {
     logout()
     navigate('/login')
   }
-
-  const allEvents = [
-    ...upcomingEvents.map((e) => ({ ...e, _type: 'upcoming' })),
-    ...pastEvents.map((e) => ({ ...e, _type: 'past' })),
-  ]
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -101,6 +122,27 @@ const AdminEvents = () => {
           </button>
         </div>
 
+        <div className="mb-6 bg-white rounded-xl shadow-sm p-5 flex flex-wrap items-end gap-4">
+          <div>
+            <label htmlFor="event-category-filter" className="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+            <select id="event-category-filter" value={category} onChange={(event) => { setCategory(event.target.value); setPage(1) }}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary">
+              <option value="">All categories</option>
+              {categories.map((value) => <option key={value} value={value}>{value.charAt(0) + value.slice(1).toLowerCase()}</option>)}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="event-status-filter" className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+            <select id="event-status-filter" value={status} onChange={(event) => { setStatus(event.target.value); setPage(1) }}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary">
+              <option value="">All statuses</option>
+              {Object.entries(STATUS_BADGES).map(([value, badge]) => <option key={value} value={value}>{badge.label}</option>)}
+            </select>
+          </div>
+          <button type="button" onClick={clearFilters} disabled={!category && !status}
+            className="px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-secondary hover:text-secondary focus-visible:ring-2 focus-visible:ring-secondary disabled:opacity-50 disabled:cursor-not-allowed">Clear filters</button>
+        </div>
+
         {/* Loading */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
@@ -125,7 +167,7 @@ const AdminEvents = () => {
         )}
 
         {/* Empty */}
-        {!loading && !error && allEvents.length === 0 && (
+        {!loading && !error && totalElements === 0 && !category && !status && (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
             <div className="text-5xl">📭</div>
             <p className="text-gray-500">No events found.</p>
@@ -138,42 +180,43 @@ const AdminEvents = () => {
           </div>
         )}
 
-        {/* Upcoming Events */}
-        {!loading && !error && upcomingEvents.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-3">
-              Upcoming ({upcomingEvents.length})
-            </h3>
-            <div className="space-y-3">
-              {upcomingEvents.map((event) => (
-                <EventRow
-                  key={event.id || event.slug}
-                  event={event}
-                  badge={{ label: 'Upcoming', color: 'bg-blue-100 text-blue-700' }}
-                  onClick={() => navigate(`/admin/events/${event.slug || event.id}`)}
-                />
-              ))}
-            </div>
+        {!loading && !error && totalElements === 0 && (category || status) && (
+          <div className="text-center py-16">
+            <p className="text-gray-500">No events match these filters.</p>
+            <button type="button" onClick={clearFilters} className="mt-3 px-4 py-2 text-secondary font-semibold rounded-lg focus-visible:ring-2 focus-visible:ring-secondary">Clear filters</button>
           </div>
         )}
 
-        {/* Past Events */}
-        {!loading && !error && pastEvents.length > 0 && (
-          <div>
-            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-3">
-              Past ({pastEvents.length})
-            </h3>
-            <div className="space-y-3">
-              {pastEvents.map((event) => (
-                <EventRow
-                  key={event.id || event.slug}
-                  event={event}
-                  badge={{ label: 'Past', color: 'bg-gray-100 text-gray-600' }}
-                  onClick={() => navigate(`/admin/events/${event.slug || event.id}`)}
-                />
-              ))}
-            </div>
+        {!loading && !error && allEvents.length > 0 && (
+          <div className="space-y-3">
+            {allEvents.map((event) => (
+              <EventRow
+                key={event.id || event.slug}
+                event={event}
+                badge={STATUS_BADGES[event.status?.toUpperCase()] || { label: event.status || 'Unknown', color: 'bg-gray-100 text-gray-600' }}
+                onClick={() => navigate(`/admin/events/${encodeURIComponent(event.slug || event.id)}`)}
+              />
+            ))}
           </div>
+        )}
+        {!loading && !error && allEvents.length > 0 && (
+          <nav aria-label="Events pagination" className="mt-6 flex flex-wrap items-center justify-between gap-4">
+            <p role="status" className="text-sm text-gray-600">Showing {firstIndex + 1}–{firstIndex + allEvents.length} of {totalElements} events</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2">
+                <label htmlFor="event-page-size" className="text-sm font-semibold text-gray-700">Events per page</label>
+                <select id="event-page-size" value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setPage(1) }}
+                  className="px-3 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary">
+                  {[10, 25, 50].map((size) => <option key={size} value={size}>{size}</option>)}
+                </select>
+              </div>
+              <button type="button" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}
+                className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-secondary">Previous</button>
+              <span className="text-sm text-gray-600">Page {currentPage} of {totalPages}</span>
+              <button type="button" disabled={currentPage === totalPages} onClick={() => setPage(currentPage + 1)}
+                className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-secondary">Next</button>
+            </div>
+          </nav>
         )}
       </main>
     </div>
@@ -198,6 +241,9 @@ const EventRow = ({ event, badge, onClick }) => (
         )}
       </div>
       <h3 className="text-base font-bold text-gray-800 truncate">{event.title}</h3>
+      {event.description && (
+        <p className="mt-1 text-sm text-gray-600 whitespace-pre-line break-words">{event.description}</p>
+      )}
       <div className="flex items-center gap-4 mt-1 text-sm text-gray-500 flex-wrap">
         {event.date && (
           <span className="flex items-center gap-1">
@@ -207,11 +253,6 @@ const EventRow = ({ event, badge, onClick }) => (
         {event.location && (
           <span className="flex items-center gap-1">
             <span>📍</span> {event.location}
-          </span>
-        )}
-        {event.slug && (
-          <span className="flex items-center gap-1 font-mono text-xs text-gray-400">
-            /{event.slug}
           </span>
         )}
       </div>
