@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { fetchEventBySlug, updateEvent, publishEvent, cancelEvent, cloneEvent } from '../../services/eventsService'
 import { logout } from '../../services/authService'
 import EventForm, { EMPTY_FORM, buildPayload, eventToForm } from '../../components/admin/EventForm'
@@ -115,6 +115,7 @@ const AdminEventEdit = () => {
       <header className="bg-primary shadow-lg sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            <Link to="/" className="px-3 py-2 text-white rounded-lg text-sm font-semibold hover:text-secondary focus-visible:ring-2 focus-visible:ring-secondary">Home</Link>
             <button
               onClick={() => navigate('/admin/events')}
               className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-sm"

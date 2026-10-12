@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
 import { fetchUsers } from '../../services/usersService'
-import { logout } from '../../services/authService'
+import AdminNavbar from '../../components/admin/AdminNavbar'
 
 const columns = [
   ['firstName', 'First name'], ['lastName', 'Last name'], ['email', 'Email'],
@@ -9,7 +8,6 @@ const columns = [
 ]
 
 export default function AdminUsers() {
-  const navigate = useNavigate()
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -32,17 +30,7 @@ export default function AdminUsers() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-primary text-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-5 py-4 flex flex-wrap items-center justify-between gap-4">
-          <Link to="/admin" className="font-bold text-lg">PEN Club Admin</Link>
-          <nav aria-label="Admin navigation" className="flex flex-wrap gap-4 items-center">
-            <Link to="/admin" className="hover:text-secondary">Dashboard</Link>
-            <Link to="/admin/events" className="hover:text-secondary">Events</Link>
-            <Link to="/admin/users" aria-current="page" className="text-secondary font-semibold">Users</Link>
-            <button type="button" className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-secondary" onClick={() => { logout(); navigate('/login', { replace: true }) }}>Logout</button>
-          </nav>
-        </div>
-      </header>
+      <AdminNavbar />
       <main className="max-w-7xl mx-auto px-5 py-8">
         <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
           <div>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { fetchEventBySlug } from '../services/eventsService'
 import EventRegistrationButton from '../components/EventRegistrationButton'
+import EventFeedbackForm from '../components/EventFeedbackForm'
+import EventFeedbackList from '../components/EventFeedbackList'
 import { canRegisterForEvent } from '../utils/eventLifecycle'
 
 const EventDetail = () => {
@@ -11,6 +13,8 @@ const EventDetail = () => {
   const [event, setEvent] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [feedbackRefresh, setFeedbackRefresh] = useState(0)
+  const [feedback, setFeedback] = useState([])
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -379,6 +383,10 @@ const EventDetail = () => {
           </button>
         </div>
       </section>
+      <div className="max-w-7xl mx-auto px-5 pb-16 space-y-6">
+        <EventFeedbackList event={event} slug={event.slug || id} refreshKey={feedbackRefresh} onLoaded={setFeedback} />
+        <EventFeedbackForm hideIfExisting key={`feedback-${id}`} event={event} slug={event.slug || id} feedback={feedback} onSubmitted={() => setFeedbackRefresh((value) => value + 1)} />
+      </div>
     </div>
   )
 }

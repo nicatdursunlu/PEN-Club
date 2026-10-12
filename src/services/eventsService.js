@@ -1,5 +1,21 @@
 import axiosInstance from './axiosInstance'
-import { isAdmin } from './authService'
+import { isAdmin, getSession } from './authService'
+
+export const fetchEventFeedback = async (slug) => {
+  const { data } = await axiosInstance.get(`/events/${encodeURIComponent(slug)}/feedback`)
+  if (!Array.isArray(data)) throw new Error('The feedback response is not a list.')
+  return data
+}
+
+export const submitEventFeedback = async (slug, { rating, comment = '' }) => {
+  const session = getSession('MEMBER')
+  if (!session) throw new Error('Please log in to leave feedback.')
+  if (!slug) throw new Error('This event is missing its feedback link.')
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5) throw new Error('Choose a rating from 1 to 5.')
+  if (typeof comment !== 'string' || comment.length > 2000) throw new Error('Comment must be at most 2000 characters.')
+  const response = await axiosInstance.post(`/events/${encodeURIComponent(slug)}/feedback`, { rating, comment }, { _expectedAccessToken: session.accessToken })
+  return response.data
+}
 
 export const fetchAllEvents = async ({ page = 0, size = 10, category, status } = {}) => {
   if (!isAdmin()) throw new Error('Admin login is required to view all events.')
