@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getMemberSession } from '../../services/memberAuthService'
+import { getSession } from '../../services/authService'
 import { getMemberProfile, updateMemberProfile } from '../../services/memberProfileService'
 
 const emptyProfile = { firstName: '', lastName: '', email: '', gender: '', educationDegree: '', phoneNumber: '' }
@@ -16,7 +16,7 @@ const errorMessage = (error) => {
 }
 
 export default function MemberProfile() {
-  const [form, setForm] = useState(() => toForm({ ...getMemberSession()?.profile, email: getMemberSession()?.email }))
+  const [form, setForm] = useState(() => toForm({ ...getSession('MEMBER')?.profile, email: getSession('MEMBER')?.email }))
   const [loading, setLoading] = useState(true)
   const [loadFailed, setLoadFailed] = useState(false)
   const [saving, setSaving] = useState(false)

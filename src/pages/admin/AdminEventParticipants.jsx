@@ -40,7 +40,7 @@ export default function AdminEventParticipants() {
           <div className="flex flex-wrap gap-4 items-center">
             <Link to="/admin/events" className="hover:text-secondary">Manage events</Link>
             <Link to="/admin/users" className="hover:text-secondary">Users</Link>
-            <button type="button" className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-secondary" onClick={() => { logout(); navigate('/admin/login', { replace: true }) }}>Logout</button>
+            <button type="button" className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-secondary" onClick={() => { logout(); navigate('/login', { replace: true }) }}>Logout</button>
           </div>
         </div>
       </header>

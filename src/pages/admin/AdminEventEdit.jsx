@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchEventBySlug, updateEvent, publishEvent, cancelEvent } from '../../services/eventsService'
+import { fetchEventBySlug, updateEvent, publishEvent, cancelEvent, cloneEvent } from '../../services/eventsService'
 import { logout } from '../../services/authService'
 import EventForm, { EMPTY_FORM, buildPayload, eventToForm } from '../../components/admin/EventForm'
 
@@ -41,7 +41,7 @@ const AdminEventEdit = () => {
 
   const handleLogout = () => {
     logout()
-    navigate('/admin/login')
+    navigate('/login')
   }
 
   const handleSubmit = async (formValues) => {
@@ -77,6 +77,8 @@ const AdminEventEdit = () => {
 
   const handleStatusChange = async (action) => {
     if (saving || statusAction) return
+    if (action === 'publish' && eventStatus !== 'DRAFT') return
+    if (action === 'cancel' && !['DRAFT', 'PUBLISHED'].includes(eventStatus)) return
     setStatusAction(action)
     try {
       const data = await (action === 'publish' ? publishEvent(slug) : cancelEvent(slug))
@@ -85,6 +87,23 @@ const AdminEventEdit = () => {
       showToast('success', action === 'publish' ? 'Event published successfully!' : 'Event cancelled successfully!')
     } catch (err) {
       showToast('error', err.response?.data?.message || err.response?.data?.error || err.message || `Failed to ${action} event. Please try again.`)
+    } finally {
+      setStatusAction(null)
+    }
+  }
+
+  const handleClone = async () => {
+    if (saving || statusAction) return
+    setStatusAction('clone')
+    try {
+      const clonedEvent = await cloneEvent(slug)
+      showToast('success', clonedEvent?.slug
+        ? 'Event cloned successfully!'
+        : 'Event cloned successfully! Find the copy in All Events.')
+      if (clonedEvent?.slug) navigate(`/admin/events/${encodeURIComponent(clonedEvent.slug)}`)
+    } catch (err) {
+      const message = err.response?.data?.message || err.response?.data?.error || err.message
+      showToast('error', Array.isArray(message) ? message.join(' ') : typeof message === 'string' ? message : 'Failed to clone event. Please try again.')
     } finally {
       setStatusAction(null)
     }
@@ -209,11 +228,22 @@ const AdminEventEdit = () => {
                   {statusAction === 'publish' ? 'Publishing...' : 'Publish Event'}
                 </button>
                 <button type="button" onClick={() => handleStatusChange('cancel')}
-                  disabled={saving || !!statusAction || eventStatus === 'CANCELLED' || !eventStatus}
+                  disabled={saving || !!statusAction || !['DRAFT', 'PUBLISHED'].includes(eventStatus)}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
                   {statusAction === 'cancel' ? 'Cancelling...' : 'Cancel Event'}
                 </button>
               </div>
+            </div>
+            <div className="mb-6 p-5 bg-white rounded-xl shadow-sm flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="font-semibold text-gray-800">Clone event</p>
+                <p className="text-sm text-gray-500">Create a copy of the saved event. Save any edits first to include them in the copy.</p>
+              </div>
+              <button type="button" onClick={handleClone}
+                disabled={saving || !!statusAction} aria-busy={statusAction === 'clone'}
+                className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+                {statusAction === 'clone' ? 'Cloning...' : 'Clone Event'}
+              </button>
             </div>
             <EventForm
               initialValues={initialValues}

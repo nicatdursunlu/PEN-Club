@@ -6,7 +6,6 @@ export const getAccessToken = () => getSession()?.accessToken || null
 export const getRefreshToken = () => getSession()?.refreshToken || null
 export const isAuthenticated = () => Boolean(getSession())
 export const isAdmin = () => getSession()?.role === 'ADMIN'
-export const getAdminSession = () => isAdmin() ? getSession() : null
 export const clearTokens = clearSession
 
 const normalizeRole = (value) => {
@@ -45,7 +44,11 @@ export const register = async ({ firstName, lastName, email, password }) => {
 }
 export const refreshAccessToken = async () => {
   const session = getSession()
-  if (!session?.refreshToken) throw new Error('No refresh token available.')
+  if (!session?.refreshToken) {
+    const error = new Error('No refresh token available. Please sign in again.')
+    error.code = 'NO_REFRESH_TOKEN'
+    throw error
+  }
   const { data } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/refresh-token`, { refreshToken: session.refreshToken })
   if (typeof data?.accessToken !== 'string' || !data.accessToken) throw new Error('Token refresh did not return an access token.')
   const current = getSession()

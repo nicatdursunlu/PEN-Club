@@ -73,7 +73,6 @@ export const buildPayload = (form) => {
     title: form.title.trim(),
     description: form.description.trim(),
     date: form.date,
-    status: form.status,
     ...(form.slug.trim() && { slug: form.slug.trim() }),
     ...(form.fullDescription.trim() && { fullDescription: form.fullDescription.trim() }),
     ...(form.time && { time: form.time }),
@@ -118,7 +117,7 @@ export const eventToForm = (event) => ({
   locationLink: event.locationLink || '',
   mapEmbedUrl: event.mapEmbedUrl || '',
   category: event.category || '',
-  status: event.status || 'UPCOMING',
+  status: event.status?.toUpperCase() || 'DRAFT',
   organizer: event.organizer || '',
   attendees: event.attendees != null ? String(event.attendees) : '',
   specialNote: event.specialNote || '',
@@ -132,7 +131,7 @@ export const eventToForm = (event) => ({
 })
 
 // ─── Main EventForm Component ─────────────────────────────────────────────────
-const EventForm = ({ initialValues = EMPTY_FORM, onSubmit, loading = false, submitLabel = 'Create Event', eventStatus, statusReadOnly = false }) => {
+const EventForm = ({ initialValues = EMPTY_FORM, onSubmit, loading = false, submitLabel = 'Create Event', eventStatus }) => {
   const [form, setForm] = useState(initialValues)
 
   useEffect(() => {
@@ -220,14 +219,13 @@ const EventForm = ({ initialValues = EMPTY_FORM, onSubmit, loading = false, subm
                 id="status"
                 name="status"
                 value={form.status}
-                disabled={statusReadOnly || ['DRAFT', 'PUBLISHED', 'CANCELLED'].includes(eventStatus)}
+                disabled
                 onChange={handleChange}
                 className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-sm bg-white"
               >
-                {['DRAFT', 'PUBLISHED', 'CANCELLED'].includes(form.status) && (
-                  <option value={form.status}>{form.status.charAt(0) + form.status.slice(1).toLowerCase()}</option>
-                )}
-                <option value="UPCOMING">Upcoming</option>
+                <option value="DRAFT">Draft</option>
+                <option value="PUBLISHED">Published</option>
+                <option value="CANCELLED">Cancelled</option>
                 <option value="COMPLETED">Completed</option>
               </select>
             </div>

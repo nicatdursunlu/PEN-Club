@@ -52,7 +52,7 @@ test('expired access token returning 403 refreshes and retries for either role',
   }
 })
 
-test('repeated 403 redirects only after a refresh attempt', async () => {
+test('repeated 403 preserves the refreshed session for either role', async () => {
   for (const role of ['ADMIN', 'MEMBER']) {
     storage.clear()
     auth.storeAuthResponse({ accessToken: `token-${role}`, refreshToken: 'refresh', role }, 'user@example.com')
@@ -68,8 +68,8 @@ test('repeated 403 redirects only after a refresh attempt', async () => {
     } })
     client.defaults.adapter = (config) => Promise.reject(new AxiosError('Forbidden', 'ERR_BAD_REQUEST', config, null, { status: 403, config }))
     await assert.rejects(client.get('/auth/profile'))
-    assert.equal(auth.getSession(), null)
-    assert.equal(destination, role === 'ADMIN' ? '/admin/login' : '/login')
+    assert.equal(auth.getAccessToken(), `new-${role}`)
+    assert.equal(destination, undefined)
     assert.equal(refreshes, 1)
   }
 })
@@ -130,7 +130,7 @@ test('retry 401 expires session without a refresh loop; anonymous 401 never refr
 test('failed refresh expires session and does not replay request', async () => {
   let session = { accessToken: 'old' }
   let requests = 0
-  const client = createClient({ getSession: () => session, refresh: async () => { throw new Error('Refresh rejected') }, expire: () => { session = null } })
+  const client = createClient({ getSession: () => session, refresh: async () => { throw new AxiosError('Refresh rejected', 'ERR_BAD_REQUEST', undefined, null, { status: 401 }) }, expire: () => { session = null } })
   client.defaults.adapter = (config) => { requests++; return unauthorized(config) }
   await assert.rejects(client.get('/profile'), /Refresh rejected/)
   assert.equal(requests, 1)
@@ -158,12 +158,13 @@ test('one shared session stores server role; switching roles replaces credential
   await auth.login('admin@example.com', 'password123')
   assert.equal(auth.isAdmin(), true)
   assert.equal(auth.getSession().role, 'ADMIN')
+  assert.equal(auth.getSession('MEMBER'), null)
   assert.deepEqual([...storage.keys()], ['pen_auth_session'])
   axios.defaults.adapter = async (config) => ({ data: { accessToken: 'member-token', refreshToken: 'member-refresh', user: { role: 'MEMBER', firstName: 'Jane' } }, status: 200, config })
   await auth.login('member@example.com', 'password123')
   assert.equal(auth.isAdmin(), false)
   assert.equal(auth.isAuthenticated(), true)
-  assert.equal(auth.getAdminSession(), null)
+  assert.equal(auth.getSession('ADMIN'), null)
   assert.equal(auth.getSession().role, 'MEMBER')
   assert.deepEqual([...storage.keys()], ['pen_auth_session'])
   axios.defaults.adapter = async () => { throw new Error('Invalid credentials') }
@@ -189,6 +190,7 @@ test('shared refresh rotates tokens and preserves role, email, and profile', asy
   }
   await auth.refreshAccessToken()
   assert.equal(auth.getSession().role, 'ADMIN')
+  assert.equal(auth.getSession('MEMBER'), null)
   assert.equal(auth.getAccessToken(), 'new')
   assert.equal(auth.getRefreshToken(), 'refresh-new')
   assert.equal(auth.getSession().profile.firstName, 'Jane')
@@ -231,4 +233,49 @@ test('refresh preserves refresh token without rotation and rejects missing acces
   assert.equal(auth.getRefreshToken(), 'refresh')
   axios.defaults.adapter = async (config) => ({ data: {}, status: 200, config })
   await assert.rejects(auth.refreshAccessToken(), /access token/)
+})
+
+
+test('temporary refresh failures preserve the session and allow another attempt', async () => {
+  for (const failure of [new AxiosError('Offline', 'ERR_NETWORK'), new AxiosError('Unavailable', 'ERR_BAD_RESPONSE', undefined, null, { status: 503 })]) {
+    let session = { accessToken: 'old' }
+    let attempts = 0
+    let expires = 0
+    const client = createClient({ getSession: () => session, refresh: async () => {
+      if (++attempts === 1) throw failure
+      session = { accessToken: 'new' }
+      return 'new'
+    }, expire: () => { expires++ } })
+    client.defaults.adapter = async (config) => config.headers.Authorization === 'Bearer old'
+      ? unauthorized(config) : { data: 'ok', status: 200, config }
+    await assert.rejects(client.get('/profile'))
+    assert.equal(session.accessToken, 'old')
+    assert.equal(expires, 0)
+    assert.equal((await client.get('/profile')).data, 'ok')
+    assert.equal(attempts, 2)
+  }
+})
+
+test('expired JWT refreshes before concurrent requests and preserves role/profile', async () => {
+  storage.clear()
+  const token = `header.${Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) - 1 })).toString('base64url')}.signature`
+  auth.storeAuthResponse({ accessToken: token, refreshToken: 'refresh', role: 'ADMIN' }, 'admin@example.com', { firstName: 'Jane' })
+  let refreshes = 0
+  axios.defaults.adapter = async (config) => {
+    refreshes++
+    await new Promise((resolve) => setTimeout(resolve, 10))
+    return { data: { accessToken: 'new', refreshToken: 'rotated' }, status: 200, config }
+  }
+  let expires = 0
+  const client = createClient({ getSession: auth.getSession, refresh: auth.refreshAccessToken, expire: () => { expires++ } })
+  client.defaults.adapter = async (config) => {
+    assert.equal(config.headers.Authorization, 'Bearer new')
+    return { data: 'ok', status: 200, config }
+  }
+  await Promise.all([client.get('/profile'), client.get('/events')])
+  assert.equal(refreshes, 1)
+  assert.equal(expires, 0)
+  assert.equal(auth.getRefreshToken(), 'rotated')
+  assert.equal(auth.getSession().role, 'ADMIN')
+  assert.equal(auth.getSession().profile.firstName, 'Jane')
 })

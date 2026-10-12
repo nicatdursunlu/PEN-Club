@@ -1,6 +1,23 @@
 import axiosInstance from './axiosInstance'
 import { isAdmin } from './authService'
 
+export const fetchAllEvents = async ({ page = 0, size = 10, category, status } = {}) => {
+  if (!isAdmin()) throw new Error('Admin login is required to view all events.')
+  const response = await axiosInstance.get('/events/admin/all', {
+    params: { page, size, ...(category && { category }), ...(status && { status }) },
+  })
+  if (!Array.isArray(response.data?.content) || !Number.isInteger(response.data.totalElements) || !Number.isInteger(response.data.totalPages)) {
+    throw new Error('The events response is not a paginated list.')
+  }
+  return response.data
+}
+
+export const cloneEvent = async (slug) => {
+  if (!isAdmin()) throw new Error('Admin login is required to clone an event.')
+  const response = await axiosInstance.post(`/events/${encodeURIComponent(slug)}/clone`)
+  return response.data
+}
+
 export const publishEvent = async (slug) => {
   if (!isAdmin()) throw new Error('Admin login is required to publish an event.')
   const response = await axiosInstance.patch(`/events/${encodeURIComponent(slug)}/publish`)

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { getMemberSession, MEMBER_AUTH_EVENT } from '../../services/memberAuthService'
+import { getSession } from '../../services/authService'
+import { AUTH_CHANGE_EVENT } from '../../services/authStorage'
 
 export default function MemberRoute({ children }) {
   const location = useLocation()
-  const [session, setSession] = useState(getMemberSession)
+  const [session, setSession] = useState(() => getSession('MEMBER'))
   useEffect(() => {
-    const updateSession = () => setSession(getMemberSession())
-    window.addEventListener(MEMBER_AUTH_EVENT, updateSession)
+    const updateSession = () => setSession(getSession('MEMBER'))
+    window.addEventListener(AUTH_CHANGE_EVENT, updateSession)
     window.addEventListener('storage', updateSession)
     return () => {
-      window.removeEventListener(MEMBER_AUTH_EVENT, updateSession)
+      window.removeEventListener(AUTH_CHANGE_EVENT, updateSession)
       window.removeEventListener('storage', updateSession)
     }
   }, [])

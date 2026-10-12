@@ -125,7 +125,7 @@ const Events = () => {
                     >
                       View Details
                     </button>
-                    <EventRegistrationButton slug={event.slug || event.id} />
+                    <EventRegistrationButton event={event} slug={event.slug || event.id} />
                   </div>
                 </div>
               ))}
