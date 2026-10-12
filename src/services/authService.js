@@ -28,6 +28,7 @@ export const storeAuthResponse = (data, email, profile = {}) => {
     accessToken: data.accessToken,
     refreshToken: data.refreshToken,
     role: resolveRole(data),
+    userId: data.userId || data.user?.id,
     email,
     profile: { ...profile, ...(data.user || data.profile || {}), email },
   })

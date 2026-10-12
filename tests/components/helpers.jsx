@@ -27,6 +27,7 @@ beforeEach(() => {
   api.fetchEventBySlug.mockResolvedValue(event)
   api.fetchDashboard.mockResolvedValue({ totalEvents: 5 })
   api.fetchEventParticipants.mockResolvedValue([])
+  api.fetchEventFeedback.mockResolvedValue([])
   fetchUsers.mockResolvedValue([])
   profile.getMemberProfile.mockResolvedValue({ firstName: 'Jane', lastName: 'Doe', email: member.email })
 })

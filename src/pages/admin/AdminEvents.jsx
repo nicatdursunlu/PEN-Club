@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { fetchAllEvents } from '../../services/eventsService'
-import { logout } from '../../services/authService'
+import AdminNavbar from '../../components/admin/AdminNavbar'
 import { formatDate } from '../../utils/dateUtils'
 
 const STATUS_BADGES = {
@@ -59,50 +59,12 @@ const AdminEvents = () => {
     return () => { requestId.current++ }
   }, [page, pageSize, category, status])
 
-  const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
+
 
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Top Bar */}
-      <header className="bg-primary shadow-lg sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-5 py-4 flex flex-wrap gap-4 items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-white font-bold text-lg leading-none">PEN Club Admin</h1>
-              <p className="text-gray-400 text-xs">Event Management</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link to="/admin/users" className="px-4 py-2 text-white rounded-lg text-sm font-semibold hover:text-secondary">Users</Link>
-            <button
-              onClick={() => navigate('/admin/events/new')}
-              className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg text-sm font-semibold hover:bg-opacity-90 transition-all"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              New Event
-            </button>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 bg-white bg-opacity-10 hover:bg-opacity-20 text-white rounded-lg text-sm font-semibold transition-all"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+      <AdminNavbar />
 
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-5 py-8">

@@ -60,3 +60,11 @@ Both admins and members sign in at `/login` using `POST /auth/login`. The role r
 The admin events list loads all statuses using authenticated `GET /events/admin/all` and displays Draft, Published, Cancelled, and Completed badges. Public upcoming/past endpoints remain in use on public pages.
 
 The admin list sends zero-based `page` and `size` query parameters (10, 25, or 50 events per page). Optional `category` and `status` filters are combined and omitted when set to All. The API returns a Spring Page with `content`, `totalElements`, and `totalPages`. Changing a filter or page size returns to the first page; pagination and result counts use the server totals.
+
+## Event feedback
+
+Logged-in members whose event response has `registered: true` can leave feedback on the event detail page for `COMPLETED` events or `PUBLISHED` events with a date before today. Draft, cancelled, current-day, and future published events do not show the form. Submission uses authenticated `POST /events/{slug}/feedback` with an integer `rating` from 1 to 5 and an optional `comment` of at most 2000 characters. Success keeps the form available and changes its button to Update feedback; subsequent submissions use the same POST endpoint to update the existing entry. Failed submissions retain entered feedback for retry. The backend must enforce registration eligibility and one feedback entry per user/event by updating that entry on repeated POST requests.
+
+The bottom of each public event detail page lists participant feedback using `GET /events/{slug}/feedback`. The frontend currently expects an array of entries with `rating` and optional `comment` fields. It renders star ratings and comments, includes loading/empty/error states and retry, and reloads after successful feedback creation or updates.
+
+Feedback entries include event/user IDs, event slug, participant names and email, rating, comment, and created/updated timestamps. The list shows participant names and wall-clock timestamps without exposing emails or IDs. The current member’s entry prefills the update form, matched by user ID or email.

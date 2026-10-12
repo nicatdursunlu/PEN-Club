@@ -38,6 +38,7 @@ export default function AdminEventParticipants() {
         <div className="max-w-7xl mx-auto px-5 py-4 flex flex-wrap items-center justify-between gap-4">
           <Link to="/admin" className="font-bold text-lg">PEN Club Admin</Link>
           <div className="flex flex-wrap gap-4 items-center">
+            <Link to="/" className="px-3 py-2 text-white rounded-lg text-sm font-semibold hover:text-secondary focus-visible:ring-2 focus-visible:ring-secondary">Home</Link>
             <Link to="/admin/events" className="hover:text-secondary">Manage events</Link>
             <Link to="/admin/users" className="hover:text-secondary">Users</Link>
             <button type="button" className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-secondary" onClick={() => { logout(); navigate('/login', { replace: true }) }}>Logout</button>

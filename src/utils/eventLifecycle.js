@@ -16,3 +16,19 @@ export const canRegisterForEvent = (event, now = new Date()) => {
   start.setDate(start.getDate() + 1)
   return start > now
 }
+
+export const canLeaveEventFeedback = (event, now = new Date()) => {
+  if (event?.registered !== true) return false
+  const status = event?.status?.toUpperCase()
+  if (status === 'COMPLETED') return true
+  if (status !== 'PUBLISHED' || !event.date) return false
+  const date = new Date(`${event.date}T00:00:00`)
+  const today = new Date(now)
+  today.setHours(0, 0, 0, 0)
+  return date < today
+}
+export const isOwnFeedback = (entry, session) => {
+  if (!session || session.role !== 'MEMBER') return false
+  if (session.userId) return entry.userId === session.userId
+  return !!session.email && entry.email?.toLowerCase() === session.email.toLowerCase()
+}
