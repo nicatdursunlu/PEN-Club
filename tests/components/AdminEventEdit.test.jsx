@@ -7,21 +7,6 @@ import AdminEventEdit from '../../src/pages/admin/AdminEventEdit'
 import * as api from '../../src/services/eventsService'
 
 describe('AdminEventEdit', () => {
-  it('AdminEventEdit publishes a draft via the publish endpoint', async () => {
-    api.fetchEventBySlug.mockResolvedValue({ ...event, status: 'DRAFT' })
-    api.publishEvent.mockResolvedValue({ status: 'PUBLISHED' })
-    mount(<AdminEventEdit />, '/admin/events/party', '/admin/events/:slug')
-    await userEvent.click(await screen.findByRole('button', { name: 'Publish Event' }))
-    expect(api.publishEvent).toHaveBeenCalledWith('party')
-    await waitFor(() => expect(screen.getByText('Status: PUBLISHED')).toBeInTheDocument())
-  })
-  it('AdminEventEdit cancels published events via the cancel endpoint', async () => {
-    api.cancelEvent.mockResolvedValue({ status: 'CANCELLED' })
-    mount(<AdminEventEdit />, '/admin/events/party', '/admin/events/:slug')
-    await userEvent.click(await screen.findByRole('button', { name: 'Cancel Event' }))
-    expect(api.cancelEvent).toHaveBeenCalledWith('party')
-    await waitFor(() => expect(screen.getByText('Status: CANCELLED')).toBeInTheDocument())
-  })
   it('AdminEventEdit saves content without sending status', async () => {
     mount(<AdminEventEdit />, '/admin/events/party', '/admin/events/:slug')
     await screen.findByRole('button', { name: 'Update Event' })
@@ -30,17 +15,23 @@ describe('AdminEventEdit', () => {
     expect(api.updateEvent).toHaveBeenCalledWith('party', expect.objectContaining({ title: 'Updated party' }))
     expect(api.updateEvent.mock.calls[0][1]).not.toHaveProperty('status')
   })
-  it('AdminEventEdit disables status actions for completed events', async () => {
+  it('AdminEventEdit blocks updates for completed events', async () => {
     api.fetchEventBySlug.mockResolvedValue({ ...event, status: 'COMPLETED' })
     mount(<AdminEventEdit />, '/admin/events/party', '/admin/events/:slug')
-    expect(await screen.findByRole('button', { name: 'Publish Event' })).toBeDisabled()
-    expect(screen.getByRole('button', { name: 'Cancel Event' })).toBeDisabled()
+    expect(await screen.findByRole('button', { name: 'Update Event' })).toBeDisabled()
   })
-  it('AdminEventEdit clones saved events and opens their copy', async () => {
-    api.cloneEvent.mockResolvedValue({ slug: 'party-copy' })
-    mount(<AdminEventEdit />, '/admin/events/party', '/admin/events/:slug')
-    await userEvent.click(await screen.findByRole('button', { name: 'Clone Event' }))
-    expect(api.cloneEvent).toHaveBeenCalledWith('party')
-    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/admin/events/party-copy'))
+  it('keeps lifecycle and clone actions off the editor', async () => {
+    mount(<AdminEventEdit />, '/admin/events/party/edit', '/admin/events/:slug/edit')
+    await screen.findByRole('button', { name: 'Update Event' })
+    expect(screen.queryByRole('link', { name: 'View', exact: true })).not.toBeInTheDocument()
+    for (const name of ['Publish Event', 'Cancel Event', 'Clone Event']) {
+      expect(screen.queryByRole('button', { name })).not.toBeInTheDocument()
+    }
+  })
+  it('redirects successful updates to the view page using the returned slug', async () => {
+    api.updateEvent.mockResolvedValue({ slug: 'updated-party' })
+    mount(<AdminEventEdit />, '/admin/events/party/edit', '/admin/events/:slug/edit')
+    await userEvent.click(await screen.findByRole('button', { name: 'Update Event' }))
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/admin/events/updated-party'))
   })
 })

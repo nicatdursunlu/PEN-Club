@@ -9,6 +9,7 @@ import Contact from '../pages/Contact'
 import AdminPanel from '../pages/admin/AdminPanel'
 import AdminCreateEvent from '../pages/admin/AdminCreateEvent'
 import AdminEvents from '../pages/admin/AdminEvents'
+import AdminEventView from '../pages/admin/AdminEventView'
 import AdminEventEdit from '../pages/admin/AdminEventEdit'
 import AdminEventParticipants from '../pages/admin/AdminEventParticipants'
 import AdminUsers from '../pages/admin/AdminUsers'
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/cabinet" element={<Navigate to="/profile" replace />} />
 
       {/* Admin Routes */}
+      <Route path="/admin/events/:slug/edit" element={<ProtectedRoute><AdminEventEdit /></ProtectedRoute>} />
       <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
       <Route path="/admin/events/:slug/participants" element={<ProtectedRoute><AdminEventParticipants /></ProtectedRoute>} />
       <Route
@@ -63,7 +65,7 @@ function Router() {
         path="/admin/events/:slug"
         element={
           <ProtectedRoute>
-            <AdminEventEdit />
+            <AdminEventView />
           </ProtectedRoute>
         }
       />
