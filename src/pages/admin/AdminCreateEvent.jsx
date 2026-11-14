@@ -36,7 +36,7 @@ const AdminCreateEvent = () => {
     setLoading(true)
     try {
       const event = await createEvent({ ...buildPayload(formValues), status: 'DRAFT' })
-      showToast('success', 'Event saved as a draft. Publish it from the event editor when ready.')
+      showToast('success', 'Event saved as a draft. Publish it from the event details page when ready.')
       const eventSlug = event?.slug || formValues.slug.trim()
       setTimeout(() => navigate(eventSlug ? `/admin/events/${encodeURIComponent(eventSlug)}` : '/admin/events'), 1200)
     } catch (err) {
@@ -108,7 +108,7 @@ const AdminCreateEvent = () => {
       <main className="max-w-5xl mx-auto px-5 py-8">
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Create New Event</h2>
-          <p className="text-gray-500 text-sm mt-1">Create a draft, then publish it from the event editor when ready.</p>
+          <p className="text-gray-500 text-sm mt-1">Create a draft, then publish it from the event details page when ready.</p>
         </div>
         <EventForm
           initialValues={EMPTY_FORM}

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchDashboard } from '../../services/eventsService'
 import AdminNavbar from '../../components/admin/AdminNavbar'
+import DashboardCharts from '../../components/admin/DashboardCharts'
+import DashboardAnalytics from '../../components/admin/DashboardAnalytics'
 import { formatDate } from '../../utils/dateUtils'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -21,6 +23,8 @@ const AdminPanel = () => {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [activeTab, setActiveTab] = useState('overview')
+  const tabs = ['Overview', 'Events', 'Participation', 'Feedback', 'Members']
 
   const load = async () => {
     setLoading(true)
@@ -50,11 +54,7 @@ const AdminPanel = () => {
   const mostRecentEvent = data?.mostRecentEvent ?? null
   const daysUntilNext = nextEvent ? getDaysUntil(nextEvent.date) : null
 
-  const CATEGORIES = [
-    { key: 'PLAY',    label: 'Play 🎮',    color: 'bg-secondary' },
-    { key: 'ENJOY',   label: 'Enjoy 🎉',   color: 'bg-accent' },
-    { key: 'NETWORK', label: 'Network 🤝', color: 'bg-blue-500' },
-  ]
+
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -90,6 +90,29 @@ const AdminPanel = () => {
           </div>
         )}
 
+        <div role="tablist" aria-label="Dashboard sections" className="flex flex-wrap gap-2 border-b border-gray-200 pb-3">
+          {tabs.map((label, index) => {
+            const tab = label.toLowerCase()
+            return <button key={tab} type="button" role="tab" id={`dashboard-tab-${tab}`} aria-controls="dashboard-tabpanel"
+              aria-selected={activeTab === tab} tabIndex={activeTab === tab ? 0 : -1}
+              onClick={() => setActiveTab(tab)}
+              onKeyDown={(event) => {
+                let next
+                if (event.key === 'ArrowRight') next = (index + 1) % tabs.length
+                if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length
+                if (event.key === 'Home') next = 0
+                if (event.key === 'End') next = tabs.length - 1
+                if (next === undefined) return
+                event.preventDefault()
+                const nextTab = tabs[next].toLowerCase()
+                setActiveTab(nextTab)
+                document.getElementById(`dashboard-tab-${nextTab}`)?.focus()
+              }}
+              className={`px-4 py-2 rounded-lg font-semibold text-sm focus-visible:ring-2 focus-visible:ring-secondary ${activeTab === tab ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-200'}`}>{label}</button>
+          })}
+        </div>
+        <div role="tabpanel" id="dashboard-tabpanel" aria-labelledby={`dashboard-tab-${activeTab}`} tabIndex={0} className="space-y-8">
+        {activeTab === 'overview' && <>
         {/* ── Row 1: 3 Stat Cards ── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           <StatCard
@@ -130,8 +153,8 @@ const AdminPanel = () => {
           />
         </div>
 
-        {/* ── Row 2: Next Event + Category Breakdown ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* ── Row 2: Next Event ── */}
+        <div className="grid grid-cols-1 gap-5">
 
           {/* Next Event Card */}
           <div className="bg-white rounded-xl shadow-sm p-6">
@@ -189,7 +212,7 @@ const AdminPanel = () => {
                   ) : (
                     <span />
                   )}
-                  <span className="text-sm text-secondary font-semibold group-hover:underline">Edit →</span>
+                  <span className="text-sm text-secondary font-semibold group-hover:underline">View →</span>
                 </div>
               </div>
             ) : (
@@ -205,72 +228,12 @@ const AdminPanel = () => {
               </div>
             )}
           </div>
-
-          {/* Category Breakdown Card */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Events by Category</h3>
-            {loading ? (
-              <div className="space-y-5">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded animate-pulse w-1/3"></div>
-                    <div className="h-2.5 bg-gray-200 rounded-full animate-pulse"></div>
-                  </div>
-                ))}
-              </div>
-            ) : totalEvents === 0 ? (
-              <div className="text-center py-8">
-                <div className="text-4xl mb-3">📊</div>
-                <p className="text-gray-400 text-sm">No events yet to show breakdown.</p>
-              </div>
-            ) : (
-              <div className="space-y-5">
-                {CATEGORIES.map(({ key, label, color }) => {
-                  const count = eventsByCategory[key] ?? 0
-                  const pct = totalEvents > 0 ? Math.round((count / totalEvents) * 100) : 0
-                  return (
-                    <div key={key}>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-sm font-semibold text-gray-700">{label}</span>
-                        <span className="text-sm font-bold text-gray-800">
-                          {count}
-                          <span className="text-gray-400 font-normal text-xs ml-1">({pct}%)</span>
-                        </span>
-                      </div>
-                      <div className="w-full bg-gray-100 rounded-full h-2.5">
-                        <div
-                          className={`${color} h-2.5 rounded-full transition-all duration-700`}
-                          style={{ width: `${pct}%` }}
-                        />
-                      </div>
-                    </div>
-                  )
-                })}
-                {/* Uncategorized */}
-                {(() => {
-                  const categorized = CATEGORIES.reduce((s, c) => s + (eventsByCategory[c.key] ?? 0), 0)
-                  const uncategorized = totalEvents - categorized
-                  if (uncategorized <= 0) return null
-                  const pct = Math.round((uncategorized / totalEvents) * 100)
-                  return (
-                    <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-sm font-semibold text-gray-500">Uncategorized</span>
-                        <span className="text-sm font-bold text-gray-600">
-                          {uncategorized}
-                          <span className="text-gray-400 font-normal text-xs ml-1">({pct}%)</span>
-                        </span>
-                      </div>
-                      <div className="w-full bg-gray-100 rounded-full h-2.5">
-                        <div className="bg-gray-400 h-2.5 rounded-full" style={{ width: `${pct}%` }} />
-                      </div>
-                    </div>
-                  )
-                })()}
-              </div>
-            )}
-          </div>
         </div>
+
+        </>}
+        {activeTab === 'events' && <DashboardCharts eventsByCategory={eventsByCategory} upcomingCount={upcomingCount} pastCount={pastCount} loading={loading} />}
+        <DashboardAnalytics data={data || {}} loading={loading} section={activeTab} />
+        {activeTab === 'overview' && <>
 
         {/* ── Row 3: Manage Events + Most Recent Event ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -343,7 +306,7 @@ const AdminPanel = () => {
                   </span>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gray-100 text-right">
-                  <span className="text-sm text-secondary font-semibold group-hover:underline">Edit →</span>
+                  <span className="text-sm text-secondary font-semibold group-hover:underline">View →</span>
                 </div>
               </div>
             ) : (
@@ -355,6 +318,8 @@ const AdminPanel = () => {
           </div>
         </div>
 
+        </>}
+        </div>
       </main>
     </div>
   )

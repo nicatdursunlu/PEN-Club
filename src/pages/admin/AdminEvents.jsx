@@ -71,7 +71,7 @@ const AdminEvents = () => {
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-800">All Events</h2>
-            <p className="text-gray-500 text-sm mt-1">Click on an event to edit it.</p>
+            <p className="text-gray-500 text-sm mt-1">Click on an event to view its details.</p>
           </div>
           <button
             onClick={loadEvents}
@@ -229,7 +229,7 @@ const EventRow = ({ event, badge, onClick }) => (
           View participants
         </Link>
       )}
-      <span className="text-sm font-semibold hidden sm:block">Edit</span>
+      <span className="text-sm font-semibold hidden sm:block">View</span>
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
       </svg>

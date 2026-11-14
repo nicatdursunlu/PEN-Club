@@ -131,7 +131,7 @@ export const eventToForm = (event) => ({
 })
 
 // ─── Main EventForm Component ─────────────────────────────────────────────────
-const EventForm = ({ initialValues = EMPTY_FORM, onSubmit, loading = false, submitLabel = 'Create Event', eventStatus }) => {
+const EventForm = ({ initialValues = EMPTY_FORM, onSubmit, loading = false, disabled = false, submitLabel = 'Create Event', eventStatus }) => {
   const [form, setForm] = useState(initialValues)
 
   useEffect(() => {
@@ -184,6 +184,7 @@ const EventForm = ({ initialValues = EMPTY_FORM, onSubmit, loading = false, subm
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    if (disabled || loading) return
     onSubmit(form)
   }
 
@@ -475,7 +476,7 @@ const EventForm = ({ initialValues = EMPTY_FORM, onSubmit, loading = false, subm
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || disabled}
               className="px-8 py-2.5 bg-secondary text-white rounded-lg font-bold text-sm hover:bg-opacity-90 transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2"
             >
               {loading ? (

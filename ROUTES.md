@@ -36,12 +36,13 @@ Upcoming event cards and detail pages include member registration via `POST /eve
 | `/admin/events` | `AdminEvents` | Authenticated | Manage events |
 | `/admin/users` | `AdminUsers` | Admin session required | View the users list |
 | `/admin/events/new` | `AdminCreateEvent` | Authenticated | Create an event |
-| `/admin/events/:slug` | `AdminEventEdit` | Authenticated | Edit an event by slug |
+| `/admin/events/:slug` | `AdminEventView` | Admin session required | View details and publish/cancel an event |
+| `/admin/events/:slug/edit` | `AdminEventEdit` | Admin session required | Update event content |
 | `/admin/events/:slug/participants` | `AdminEventParticipants` | Admin session required | View participant details and registration history |
 
 The admin events list (`/admin/events`) shows a **View participants** link on each event row. The participants page links back to the admin events list, uses the existing protected admin route, and calls `GET /events/{slug}/participants` using the shared authenticated API client and a role-gated admin route. It expects a list of participant records, displays all supplied fields, and includes registered/unregistered totals, loading, empty, retry, and forbidden states. The API must enforce the admin role; frontend routing follows the shared session’s Admin role.
 
-For example, `/admin/events/community-meetup` edits the event with slug `community-meetup`. The static `/admin/events/new` route opens the creation page.
+For example, `/admin/events/community-meetup` shows details of the event with slug `community-meetup`. The static `/admin/events/new` route opens the creation page.
 
 Protected admin routes use [ProtectedRoute](src/components/admin/ProtectedRoute.jsx). Unauthenticated visitors are redirected to `/login`, with the requested location stored in navigation state as `from`.
 
